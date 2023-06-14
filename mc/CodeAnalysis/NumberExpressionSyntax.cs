@@ -9,7 +9,7 @@ namespace Minsk.CodeAnalysis
     {
         public NumberExpressionSyntax(SyntaxToken numberToken)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: numberToken:{numberToken}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter: numberToken:{numberToken.Text}", Common.LOG_CATEGORY);
 
             NumberToken = numberToken;
 
@@ -22,7 +22,7 @@ namespace Minsk.CodeAnalysis
 
         public override IEnumerable<SyntaxNode> GetChildren()
         {
-            Int64 startTicks = Log.Trace($"Enter/Exit", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.SYNTAX($"Enter/Exit", Common.LOG_CATEGORY);
 
             yield return NumberToken;
         }

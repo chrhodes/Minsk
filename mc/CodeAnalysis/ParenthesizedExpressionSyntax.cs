@@ -9,9 +9,13 @@ namespace Minsk.CodeAnalysis
     {
         public ParenthesizedExpressionSyntax(SyntaxToken openParenthesisToken, ExpressionSyntax expression, SyntaxToken closeParenthesisToken)
         {
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter: openParenthesisToken: {openParenthesisToken.Text} expression: {expression} closeParenthesisToken: {closeParenthesisToken.Text}", Common.LOG_CATEGORY);
+
             OpenParenthesisToken = openParenthesisToken;
             Expression = expression;
             CloseParenthesisToken = closeParenthesisToken;
+
+            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public override SyntaxKind Kind => SyntaxKind.ParenthesizedExpression;
@@ -22,7 +26,7 @@ namespace Minsk.CodeAnalysis
 
         public override IEnumerable<SyntaxNode> GetChildren()
         {
-            Int64 startTicks = Log.Trace($"Enter/Exit", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.SYNTAX($"Enter/Exit", Common.LOG_CATEGORY);
 
             yield return OpenParenthesisToken;
             yield return Expression;
