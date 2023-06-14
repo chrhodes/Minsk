@@ -8,6 +8,7 @@ namespace Minsk.CodeAnalysis.Syntax
 {
     // NOTE(crhodes)
     // Lexer breaks the input stream into tokens (words)
+    // which are then passed to the Parser
 
     internal sealed class Lexer
     {

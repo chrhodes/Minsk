@@ -36,13 +36,19 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public static SyntaxTree Parse(string text)
         {
+            Int64 startTicks = Log.SYNTAX($"Enter: text: {text}", Common.LOG_CATEGORY);
+
             var sourceText = SourceText.From(text);
+
+            Log.SYNTAX($"Exit", Common.LOG_CATEGORY, startTicks);
 
             return Parse(sourceText);
         }
 
         public static SyntaxTree Parse(SourceText text)
         {
+            Int64 startTicks = Log.SYNTAX($"Enter/Exit: text: {text}", Common.LOG_CATEGORY);
+
             return new SyntaxTree(text);
         }
 

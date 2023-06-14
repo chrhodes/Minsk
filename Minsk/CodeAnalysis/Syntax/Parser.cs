@@ -112,7 +112,7 @@ namespace Minsk.CodeAnalysis.Syntax
             var statement = ParseStatement();
             var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
 
-            Log.PARSER($"Exit new SyntaxTree()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new CompilationUnitSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new CompilationUnitSyntax(statement, endOfFileToken);
         }
@@ -245,7 +245,7 @@ namespace Minsk.CodeAnalysis.Syntax
         {
             Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
 
-            Log.PARSER($"Exit return ParseAssignmentExpression()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit", Common.LOG_CATEGORY, startTicks);
 
             return ParseAssignmentExpression();
         }
@@ -266,7 +266,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 return new AssignmentExpressionSyntax(identifierToken, operatorToken, right);
             }
 
-            Log.PARSER($"Exit return ParseBinaryExpression()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit", Common.LOG_CATEGORY, startTicks);
 
             return ParseBinaryExpression();
         }
