@@ -11,9 +11,9 @@ using VNC;
 
 namespace Minsk
 {
-    partial class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Int64 startTicks = Log.APPLICATION_START($"SignalR Startup Delay", Common.LOG_CATEGORY);
             Thread.Sleep(200);
@@ -61,7 +61,7 @@ namespace Minsk
 
                     PrettyPrint2(syntaxTree.Root);
 
-                    Console.ForegroundColor = color;
+                    Console.ResetColor();
                 }
 
                 IReadOnlyList<string> diagnostics = syntaxTree.Diagnostics.Concat(binder.Diagnostics).ToArray();

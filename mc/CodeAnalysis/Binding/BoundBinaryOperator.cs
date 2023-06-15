@@ -1,6 +1,9 @@
 using System;
+using System.Reflection.Emit;
 
 using Minsk.CodeAnalysis.Syntax;
+
+using VNC;
 
 namespace Minsk.CodeAnalysis.Binding
 {
@@ -9,20 +12,30 @@ namespace Minsk.CodeAnalysis.Binding
         public BoundBinaryOperator(SyntaxKind syntaxKind, BoundBinaryOperatorKind kind, Type type)
             : this(syntaxKind, kind, type, type, type)
         {
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter: syntaxKind:{syntaxKind} kind:{kind} type:{type}", Common.LOG_CATEGORY);
+
+            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public BoundBinaryOperator(SyntaxKind syntaxKind, BoundBinaryOperatorKind kind, Type operandType, Type resultType)
             : this(syntaxKind, kind, operandType, operandType, resultType)
         {
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter: syntaxKind:{syntaxKind} kind:{kind} operandType:{operandType} resultType:{resultType}", Common.LOG_CATEGORY);
+
+            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public BoundBinaryOperator(SyntaxKind syntaxKind, BoundBinaryOperatorKind kind, Type leftType, Type rightType, Type resultType)
         {
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter: syntaxKind:{syntaxKind} kind:{kind} leftType:{leftType} rightType:{rightType} resultType:{resultType}", Common.LOG_CATEGORY);
+
             SyntaxKind = syntaxKind;
             Kind = kind;
             LeftType = leftType;
             RightType = rightType;
             Type = resultType;
+
+            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public SyntaxKind SyntaxKind { get; }
@@ -51,15 +64,21 @@ namespace Minsk.CodeAnalysis.Binding
 
         public static BoundBinaryOperator Bind(SyntaxKind syntaxKind, Type leftType, Type rightType)
         {
+            Int64 startTicks = Log.BINDER($"Enter syntaxKind:{syntaxKind} leftType:{leftType} rightType:{rightType}", Common.LOG_CATEGORY);
+
             foreach (var op in _operators)
             {
                 if (op.SyntaxKind == syntaxKind
                     && op.LeftType == leftType
                     && op.RightType == rightType)
                 {
+                    Log.BINDER($"Exit op:{op}", Common.LOG_CATEGORY, startTicks);
+
                     return op;
                 }
             }
+
+            Log.BINDER($"Exit (null)", Common.LOG_CATEGORY, startTicks);
 
             return null;
         }

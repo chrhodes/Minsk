@@ -17,20 +17,20 @@ namespace Minsk.CodeAnalysis.Binding
 
         public BoundExpression BindExpression(ExpressionSyntax syntax)
         {
-            Int64 startTicks = Log.Trace($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter syntax: {syntax}", Common.LOG_CATEGORY);
 
             switch (syntax.Kind)
             {
                 case SyntaxKind.LiteralExpression:
-                    Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindLiteralExpression()", Common.LOG_CATEGORY, startTicks);
                     return BindLiteralExpression((LiteralExpressionSyntax)syntax);
 
                 case SyntaxKind.UnaryExpression:
-                    Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindUnaryExpression()", Common.LOG_CATEGORY, startTicks);
                     return BindUnaryExpression((UnaryExpressionSyntax)syntax);
 
                 case SyntaxKind.BinaryExpression:
-                    Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindBinaryExpression()", Common.LOG_CATEGORY, startTicks);
                     return BindBinaryExpression((BinaryExpressionSyntax)syntax);
 
                 default:
@@ -41,18 +41,18 @@ namespace Minsk.CodeAnalysis.Binding
 
         private BoundExpression BindLiteralExpression(LiteralExpressionSyntax syntax)
         {
-            Int64 startTicks = Log.Trace($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter syntax: {syntax}", Common.LOG_CATEGORY);
 
             var value = syntax.Value ?? 0;
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.BINDER($"Exit new BoundLiteralExprression", Common.LOG_CATEGORY, startTicks);
 
             return new BoundLiteralExpression(value);
         }
 
         private BoundExpression BindUnaryExpression(UnaryExpressionSyntax syntax)
         {
-            Int64 startTicks = Log.Trace($"Enter syntax:{syntax}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax}", Common.LOG_CATEGORY);
 
             var boundOperand = BindExpression(syntax.Operand);
             var boundOperator = BoundUnaryOperator.Bind(syntax.OperatorToken.Kind, boundOperand.Type);
@@ -67,14 +67,14 @@ namespace Minsk.CodeAnalysis.Binding
                 return boundOperand;
             }
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
 
             return new BoundUnaryExpression(boundOperator, boundOperand);
         }
 
         private BoundExpression BindBinaryExpression(BinaryExpressionSyntax syntax)
         {
-            Int64 startTicks = Log.Trace($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter syntax: {syntax}", Common.LOG_CATEGORY);
 
             var boundLeft = BindExpression(syntax.Left);
             var boundRight = BindExpression(syntax.Right);
@@ -86,7 +86,7 @@ namespace Minsk.CodeAnalysis.Binding
 
                 // NOTE(crhodes)
                 // Return something for now to avoid cascading errors.
-                Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+                Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
                 return boundLeft;
             }
 
