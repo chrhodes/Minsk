@@ -335,4 +335,6 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
-/Traces/Minsk Traces.docx
+
+# Learning Traces from logging Output
+Traces/*

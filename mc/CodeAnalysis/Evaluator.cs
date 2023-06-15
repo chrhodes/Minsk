@@ -12,7 +12,7 @@ namespace Minsk.CodeAnalysis
 
         public Evaluator(BoundExpression root)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: root:{root}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter: root:{root.Kind}", Common.LOG_CATEGORY);
 
             _root = root;
 
@@ -28,7 +28,7 @@ namespace Minsk.CodeAnalysis
 
         private object EvaluateExpression(BoundExpression node)
         {
-            Int64 startTicks = Log.EVALUATOR($"Enter node:{node}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.EVALUATOR($"Enter node:{node.Kind}", Common.LOG_CATEGORY);
 
             if (node is BoundLiteralExpression n)
             {

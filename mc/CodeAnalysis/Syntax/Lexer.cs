@@ -17,7 +17,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public Lexer(string text)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: text:{text}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter: text:>{text}<", Common.LOG_CATEGORY);
 
             _text = text;
 
@@ -31,25 +31,29 @@ namespace Minsk.CodeAnalysis.Syntax
 
         private char Peek(int offset)
         {
+            Int64 startTicks = Log.LEXER($"Enter offset:{offset}", Common.LOG_CATEGORY);
+
             var index = _position + offset;
 
             if (index >= _text.Length)
             {
+                Log.LEXER($"Exit >\0<", Common.LOG_CATEGORY, startTicks);
+
                 return '\0';
             }
             else
             {
+                Log.LEXER($"Exit >{_text[_position]}<", Common.LOG_CATEGORY, startTicks);
+
                 return _text[_position];
             }
         }
 
         private void Next()
         {
-            Int64 startTicks = Log.LEXER($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.LEXER($"Enter/Exit {_position + 1}", Common.LOG_CATEGORY);
 
             _position++;
-
-            Log.LEXER($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public SyntaxToken Lex()
@@ -58,7 +62,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
             if (_position >= _text.Length)
             {
-                Log.LEXER($"Exit (new EndOfFileToken)", Common.LOG_CATEGORY, startTicks);
+                Log.LEXER($"Exit new EndOfFileToken", Common.LOG_CATEGORY, startTicks);
 
                 return new SyntaxToken(SyntaxKind.EndOfFileToken, _position, "\0", null);
             }
@@ -77,10 +81,10 @@ namespace Minsk.CodeAnalysis.Syntax
 
                 if (!int.TryParse(text, out var value))
                 {
-                    _diagnostics.Add($"ERROR: The number {_text} is not a valid Int32");
+                    _diagnostics.Add($"ERROR: The number:{_text} is not a valid Int32");
                 }
 
-                Log.LEXER($"Exit (new NumberToken)", Common.LOG_CATEGORY, startTicks);
+                Log.LEXER($"Exit new NumberToken({start},{text},{value})", Common.LOG_CATEGORY, startTicks);
 
                 return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
             }
@@ -97,7 +101,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 var length = _position - start;
                 var text = _text.Substring(start, length);
 
-                Log.LEXER($"Exit (new WhiteSpaceToken)", Common.LOG_CATEGORY, startTicks);
+                Log.LEXER($"Exit new WhiteSpaceToken({start},{text})", Common.LOG_CATEGORY, startTicks);
 
                 return new SyntaxToken(SyntaxKind.WhiteSpaceToken, start, text, null);
             }
@@ -118,7 +122,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 var text = _text.Substring(start, length);
                 var kind = SyntaxFacts.GetKeyWordKind(text);
 
-                Log.LEXER($"Exit (new WhiteSpaceToken)", Common.LOG_CATEGORY, startTicks);
+                Log.LEXER($"Exit new SyntaxToken({kind},{start},{text})", Common.LOG_CATEGORY, startTicks);
 
                 return new SyntaxToken(kind, start, text, null);
             }
@@ -126,26 +130,26 @@ namespace Minsk.CodeAnalysis.Syntax
             switch (Current)
             {
                 case '+':
-                    Log.LEXER($"Exit (new PlusToken)", Common.LOG_CATEGORY, startTicks);
+                    Log.LEXER($"Exit new PlusToken", Common.LOG_CATEGORY, startTicks);
 
                     return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);
                 case '-':
-                    Log.LEXER($"Exit (new MinusToken)", Common.LOG_CATEGORY, startTicks);
+                    Log.LEXER($"Exit new MinusToken", Common.LOG_CATEGORY, startTicks);
 
                     return new SyntaxToken(SyntaxKind.MinusToken, _position++, "-", null);
                 case '*':
-                    Log.LEXER($"Exit (new StarToken)", Common.LOG_CATEGORY, startTicks);
+                    Log.LEXER($"Exit new StarToken", Common.LOG_CATEGORY, startTicks);
 
                     return new SyntaxToken(SyntaxKind.StarToken, _position++, "*", null);
                 case '/':
-                    Log.LEXER($"Exit (new SlashToken)", Common.LOG_CATEGORY, startTicks);
+                    Log.LEXER($"Exit new SlashToken", Common.LOG_CATEGORY, startTicks);
                     return new SyntaxToken(SyntaxKind.SlashToken, _position++, "/", null);
                 case '(':
-                    Log.LEXER($"Exit (new OpenParenthesisToken)", Common.LOG_CATEGORY, startTicks);
+                    Log.LEXER($"Exit new OpenParenthesisToken", Common.LOG_CATEGORY, startTicks);
 
                     return new SyntaxToken(SyntaxKind.OpenParenthesisToken, _position++, "(", null);
                 case ')':
-                    Log.LEXER($"Exit (new CloseParenthesisToken)", Common.LOG_CATEGORY, startTicks);
+                    Log.LEXER($"Exit new CloseParenthesisToken", Common.LOG_CATEGORY, startTicks);
 
                     return new SyntaxToken(SyntaxKind.CloseParenthesisToken, _position++, ")", null);
 
@@ -157,7 +161,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 case '&':
                     if (Lookahead == '&')
                     {
-                        Log.LEXER($"Exit (new AmpersandAmpersandToken)", Common.LOG_CATEGORY, startTicks);
+                        Log.LEXER($"Exit new AmpersandAmpersandToken", Common.LOG_CATEGORY, startTicks);
 
                         return new SyntaxToken(SyntaxKind.AmpersandAmpersandToken, _position += 2, "&&", null);
                     }
@@ -166,7 +170,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 case '|':
                     if (Lookahead == '|')
                     {
-                        Log.LEXER($"Exit (new PipePipeToken)", Common.LOG_CATEGORY, startTicks);
+                        Log.LEXER($"Exit new PipePipeToken", Common.LOG_CATEGORY, startTicks);
 
                         return new SyntaxToken(SyntaxKind.PipePipeToken, _position += 2, "||", null);
                     }
@@ -175,7 +179,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 case '=':
                     if (Lookahead == '=')
                     {
-                        Log.LEXER($"Exit (new EqualsEqualsToken)", Common.LOG_CATEGORY, startTicks);
+                        Log.LEXER($"Exit new EqualsEqualsToken", Common.LOG_CATEGORY, startTicks);
 
                         return new SyntaxToken(SyntaxKind.EqualsEqualsToken, _position += 2, "==", null);
                     }
@@ -184,13 +188,13 @@ namespace Minsk.CodeAnalysis.Syntax
                 case '!':
                     if (Lookahead == '=')
                     {
-                        Log.LEXER($"Exit (new BangEqualsToken)", Common.LOG_CATEGORY, startTicks);
+                        Log.LEXER($"Exit new BangEqualsToken", Common.LOG_CATEGORY, startTicks);
 
                         return new SyntaxToken(SyntaxKind.BangEqualsToken, _position += 2, "|=", null);
                     }
                     else
                     {
-                        Log.LEXER($"Exit (new BangToken)", Common.LOG_CATEGORY, startTicks);
+                        Log.LEXER($"Exit new BangToken", Common.LOG_CATEGORY, startTicks);
 
                         return new SyntaxToken(SyntaxKind.BangToken, _position++, "!", null);
                     }
@@ -198,7 +202,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
             _diagnostics.Add($"ERROR: Bad character input: '{Current}'");
 
-            Log.LEXER($"Exit: ERROR: Bad character input: '{Current}' (new BadToken)", Common.LOG_CATEGORY, startTicks);
+            Log.LEXER($"Exit: ERROR: Bad character input:'{Current}' new BadToken({_text.Substring(_position - 1, 1)})", Common.LOG_CATEGORY, startTicks);
 
             return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position - 1, 1), null);
         }

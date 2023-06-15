@@ -13,7 +13,7 @@ namespace Minsk.CodeAnalysis.Syntax
     {
         public SyntaxTree(IEnumerable<string> diagnostics, ExpressionSyntax root, SyntaxToken endOfFileToken)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: diagnostics: {diagnostics} root:{root} endOfFileToken:{endOfFileToken}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter: diagnostics:{diagnostics.Count()} root:{root.Kind} endOfFileToken:{endOfFileToken.Kind}", Common.LOG_CATEGORY);
 
             Diagnostics = diagnostics.ToArray();
             Root = root;
@@ -28,7 +28,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public static SyntaxTree Parse(string text)
         {
-            Int64 startTicks = Log.SYNTAX($"Enter: text: {text}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.SYNTAX($"Enter: text:>{text}<", Common.LOG_CATEGORY);
 
             var parser = new Parser(text);
 
