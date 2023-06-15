@@ -9,7 +9,7 @@ namespace Minsk.CodeAnalysis.Syntax
     {
         public BinaryExpressionSyntax(ExpressionSyntax left, SyntaxToken operatorToken, ExpressionSyntax right)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: left: {left} operatorToken: {operatorToken} right: {right}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter: left: {left.Kind} operatorToken: {operatorToken.Kind} right: {right.Kind}", Common.LOG_CATEGORY);
 
             Left = left;
             OperatorToken = operatorToken;

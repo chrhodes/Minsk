@@ -7,7 +7,22 @@ namespace Minsk.CodeAnalysis.Syntax
     {
         // NOTE(crhodes)
         // There is interaction between Unary and Binary Operators
-        // 3 > 2, 1
+        //
+        // -1 * 3
+        //
+        //     -
+        //     |
+        //     *
+        //    / \
+        //   1   3
+
+        // or
+
+        //     *
+        //    / \
+        //   -   3
+        //   |
+        //   1
 
         public static int GetUnaryOperatorPrecedence(this SyntaxKind kind)
         {

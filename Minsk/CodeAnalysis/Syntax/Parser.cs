@@ -22,7 +22,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public Parser(SourceText text)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: text: ({text})", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter: text:>{text}<", Common.LOG_CATEGORY);
 
             var tokens = new List<SyntaxToken>();
             var lexer = new Lexer(text);
@@ -90,9 +90,16 @@ namespace Minsk.CodeAnalysis.Syntax
 
             if (Current.Kind == kind)
             {
-                Log.PARSER($"Exit Current.Kind == kind", Common.LOG_CATEGORY, startTicks);
+                // HACK(crhodes)
+                // This is so we can print the kind
 
-                return NextToken();
+                var nextT = NextToken();
+
+                Log.PARSER($"Exit {nextT.Kind}", Common.LOG_CATEGORY, startTicks);
+
+                return nextT;
+
+                //return NextToken();
             }
 
             _diagnostics.ReportUnexpectedToken(Current.Span, Current.Kind, kind);
