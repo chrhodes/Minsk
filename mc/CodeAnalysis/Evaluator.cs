@@ -21,18 +21,18 @@ namespace Minsk.CodeAnalysis
 
         public object Evaluate()
         {
-            Int64 startTicks = Log.Trace($"Enter/Exit", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.EVALUATOR($"Enter/Exit", Common.LOG_CATEGORY);
 
             return EvaluateExpression(_root);
         }
 
         private object EvaluateExpression(BoundExpression node)
         {
-            Int64 startTicks = Log.Trace($"Enter node:{node}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.EVALUATOR($"Enter node:{node}", Common.LOG_CATEGORY);
 
             if (node is BoundLiteralExpression n)
             {
-                Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                 return n.Value;
             }
@@ -44,17 +44,17 @@ namespace Minsk.CodeAnalysis
                 switch (u.Op.Kind)
                 {
                     case BoundUnaryOperatorKind.Identity:
-                        Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                        Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                         return (int)operand;
 
                     case BoundUnaryOperatorKind.Negation:
-                        Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                        Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                         return -(int)operand;
 
                     case BoundUnaryOperatorKind.LogicalNegation:
-                        Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                        Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                         return !(Boolean)operand;
 
@@ -71,44 +71,44 @@ namespace Minsk.CodeAnalysis
                 switch (b.Op.Kind)
                 {
                     case BoundBinaryOperatorKind.Addition:
-                        Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                        Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                         return (int)left + (int)right;
 
                     case BoundBinaryOperatorKind.Subtraction:
-                        Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                        Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                         return (int)left - (int)right;
 
                     case BoundBinaryOperatorKind.Multiplication:
-                        Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                        Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                         return (int)left * (int)right;
 
                     case BoundBinaryOperatorKind.Division:
-                        Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                        Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                         return (int)left / (int)right;
 
 
                     case BoundBinaryOperatorKind.LogicalAnd:
-                        Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                        Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                         return (Boolean)left && (Boolean)right;
 
 
                     case BoundBinaryOperatorKind.LogicalOr:
-                        Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                        Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                         return (Boolean)left || (Boolean)right;
 
                     case BoundBinaryOperatorKind.Equals:
-                        Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                        Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                         return Equals(left, right);
 
                     case BoundBinaryOperatorKind.NotEquals:
-                        Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+                        Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
                         return !Equals(left, right);
 
