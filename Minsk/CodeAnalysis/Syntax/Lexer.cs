@@ -233,7 +233,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 text = _text.ToString(_start, length);
             }
 
-            Log.PARSER($"Exit: new SyntaxToken({_kind},{_start},{text},{_value})", Common.LOG_CATEGORY, startTicks);
+            Log.LEXER($"Exit: new SyntaxToken({_kind},{_start},{text},{_value})", Common.LOG_CATEGORY, startTicks);
 
             return new SyntaxToken(_kind, _start, text, _value);
         }
@@ -249,7 +249,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
             _kind = SyntaxKind.WhiteSpaceToken;
 
-            Log.PARSER($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.LEXER($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         private void ReadNumberToken()
@@ -272,7 +272,7 @@ namespace Minsk.CodeAnalysis.Syntax
             _value = value;
             _kind = SyntaxKind.NumberToken;
 
-            Log.PARSER($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.LEXER($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         private void ReadIdentifierOrKeyword()
@@ -290,7 +290,7 @@ namespace Minsk.CodeAnalysis.Syntax
             var text = _text.ToString(_start, length);
             _kind = SyntaxFacts.GetKeyWordKind(text);
 
-            Log.PARSER($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.LEXER($"Exit", Common.LOG_CATEGORY, startTicks);
         }
     }
 }
