@@ -233,23 +233,29 @@ namespace Minsk.CodeAnalysis.Syntax
                 text = _text.ToString(_start, length);
             }
 
-            Log.PARSER($"Exit: new SyntaxToken()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit: new SyntaxToken({_kind},{_start},{text},{_value})", Common.LOG_CATEGORY, startTicks);
 
             return new SyntaxToken(_kind, _start, text, _value);
         }
 
         private void ReadWhiteSpace()
         {
+            Int64 startTicks = Log.LEXER($"Enter", Common.LOG_CATEGORY);
+
             while (char.IsWhiteSpace(Current))
             {
                 _position++;
             }
 
             _kind = SyntaxKind.WhiteSpaceToken;
+
+            Log.PARSER($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         private void ReadNumberToken()
         {
+            Int64 startTicks = Log.LEXER($"Enter", Common.LOG_CATEGORY);
+
             while (char.IsDigit(Current))
             {
                 _position++;
@@ -265,10 +271,14 @@ namespace Minsk.CodeAnalysis.Syntax
 
             _value = value;
             _kind = SyntaxKind.NumberToken;
+
+            Log.PARSER($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         private void ReadIdentifierOrKeyword()
         {
+            Int64 startTicks = Log.LEXER($"Enter", Common.LOG_CATEGORY);
+
             // true
             // false
             while (char.IsLetter(Current))
@@ -279,6 +289,8 @@ namespace Minsk.CodeAnalysis.Syntax
             var length = _position - _start;
             var text = _text.ToString(_start, length);
             _kind = SyntaxFacts.GetKeyWordKind(text);
+
+            Log.PARSER($"Exit", Common.LOG_CATEGORY, startTicks);
         }
     }
 }

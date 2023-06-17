@@ -4,7 +4,6 @@ namespace Minsk.CodeAnalysis
 {
     public sealed class Diagnostic
     {
-
         public Diagnostic(TextSpan span, string message)
         {
             Span = span;

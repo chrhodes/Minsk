@@ -60,6 +60,9 @@ namespace Minsk.CodeAnalysis
 
         public Compilation ContinueWith(SyntaxTree syntaxTree)
         {
+            Int64 startTicks = Log.COMPILER($"Enter", Common.LOG_CATEGORY);
+            Log.COMPILER($"Exit", Common.LOG_CATEGORY, startTicks);
+
             return new Compilation(this, syntaxTree);
         }
 
