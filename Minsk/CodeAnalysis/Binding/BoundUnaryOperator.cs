@@ -11,9 +11,9 @@ namespace Minsk.CodeAnalysis.Binding
         public BoundUnaryOperator(SyntaxKind syntaxKind, BoundUnaryOperatorKind kind, Type operandType)
             : this(syntaxKind, kind, operandType, operandType)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter syntaxKind:{syntaxKind} kind:{kind} operandType:{operandType}", Common.LOG_CATEGORY);
+            //Int64 startTicks = Log.CONSTRUCTOR($"Enter syntaxKind:{syntaxKind} kind:{kind} operandType:{operandType}", Common.LOG_CATEGORY);
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            //Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public BoundUnaryOperator(SyntaxKind syntaxKind, BoundUnaryOperatorKind kind, Type operandType, Type resultType)
@@ -49,13 +49,13 @@ namespace Minsk.CodeAnalysis.Binding
                 if (op.SyntaxKind == syntaxKind
                     && op.OperandType == operandType)
                 {
-                    Log.BINDER($"Exit op:{op}", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit op:{op.Kind}", Common.LOG_CATEGORY, startTicks);
 
                     return op;
                 }
             }
 
-            Log.BINDER($"Exit (null)", Common.LOG_CATEGORY, startTicks);
+            Log.BINDER($"Exit null", Common.LOG_CATEGORY, startTicks);
 
             return null;
         }

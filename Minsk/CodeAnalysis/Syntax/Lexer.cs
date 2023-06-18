@@ -25,7 +25,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public Lexer(SourceText text)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter text:>{text}<", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter text:{text}", Common.LOG_CATEGORY);
 
             _text = text;
 
@@ -45,13 +45,13 @@ namespace Minsk.CodeAnalysis.Syntax
 
             if (index >= _text.Length)
             {
-                Log.LEXER($"Exit >\0<", Common.LOG_CATEGORY, startTicks);
+                Log.LEXER($"Exit \0", Common.LOG_CATEGORY, startTicks);
 
                 return '\0';
             }
             else
             {
-                Log.LEXER($"Exit >{_text[index]}<", Common.LOG_CATEGORY, startTicks);
+                Log.LEXER($"Exit {_text[index]}", Common.LOG_CATEGORY, startTicks);
 
                 return _text[index];
             }

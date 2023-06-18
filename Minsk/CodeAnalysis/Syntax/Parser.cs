@@ -22,7 +22,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public Parser(SourceText text)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter text:>{text}<", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter text:{text}", Common.LOG_CATEGORY);
 
             var tokens = new List<SyntaxToken>();
             var lexer = new Lexer(text);
@@ -54,7 +54,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         private SyntaxToken Peek(int offset)
         {
-            Int64 startTicks = Log.PARSER($"Enter offset: ({offset})", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.PARSER($"Enter offset:{offset}", Common.LOG_CATEGORY);
 
             var index = _position + offset;
 
@@ -65,7 +65,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 return _tokens[_tokens.Length - 1];
             }
 
-            Log.PARSER($"Exit ({_tokens[index].Kind})", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit {_tokens[index].Kind}", Common.LOG_CATEGORY, startTicks);
 
             return _tokens[index];
         }
@@ -79,14 +79,14 @@ namespace Minsk.CodeAnalysis.Syntax
             var current = Current;
             _position++;
 
-            Log.PARSER($"Exit ({current.Kind})", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit {current.Kind}", Common.LOG_CATEGORY, startTicks);
 
             return current;
         }
 
         private SyntaxToken MatchToken(SyntaxKind kind)
         {
-            Int64 startTicks = Log.PARSER($"Enter kind: ({kind})", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.PARSER($"Enter kind:{kind}", Common.LOG_CATEGORY);
 
             if (Current.Kind == kind)
             {
@@ -107,7 +107,7 @@ namespace Minsk.CodeAnalysis.Syntax
             // NOTE(crhodes)
             // This is super useful because ...
 
-            Log.PARSER($"Exit new SyntaxToken()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new SyntaxToken({kind})", Common.LOG_CATEGORY, startTicks);
 
             return new SyntaxToken(kind, Current.Position, null, null);
         }
@@ -311,6 +311,9 @@ namespace Minsk.CodeAnalysis.Syntax
                 var identifierToken = NextToken();
                 var operatorToken = NextToken();
                 var right = ParseAssignmentExpression();
+
+                Log.PARSER($"Exit ParseAssignmentExpression()", Common.LOG_CATEGORY, startTicks);
+
                 return new AssignmentExpressionSyntax(identifierToken, operatorToken, right);
             }
 
@@ -354,7 +357,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
 
-            Log.PARSER($"Exit left:{left.Kind}", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit {left.Kind}", Common.LOG_CATEGORY, startTicks);
 
             return left;
         }
@@ -366,24 +369,24 @@ namespace Minsk.CodeAnalysis.Syntax
             switch (Current.Kind)
             {
                 case SyntaxKind.OpenParenthesisToken:
-                    Log.PARSER($"Exit ParseParenthesizedExpression", Common.LOG_CATEGORY, startTicks);
+                    Log.PARSER($"Exit ParseParenthesizedExpression()", Common.LOG_CATEGORY, startTicks);
 
                     return ParseParenthesizedExpression();
 
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
-                    Log.PARSER($"Exit ParseBooleanLiteral", Common.LOG_CATEGORY, startTicks);
+                    Log.PARSER($"Exit ParseBooleanLiteral()", Common.LOG_CATEGORY, startTicks);
 
                     return ParseBooleanLiteral();
 
                 case SyntaxKind.NumberToken:
-                    Log.PARSER($"Exit ParseNumberLiteral", Common.LOG_CATEGORY, startTicks);
+                    Log.PARSER($"Exit ParseNumberLiteral()", Common.LOG_CATEGORY, startTicks);
 
                     return ParseNumberLiteral();
 
                 case SyntaxKind.IdentifierToken:
                 default:
-                    Log.PARSER($"Exit ParseNameExpression", Common.LOG_CATEGORY, startTicks);
+                    Log.PARSER($"Exit ParseNameExpression()", Common.LOG_CATEGORY, startTicks);
 
                     return ParseNameExpression();
             }
@@ -397,7 +400,7 @@ namespace Minsk.CodeAnalysis.Syntax
             var expression = ParseExpression();
             var right = MatchToken(SyntaxKind.CloseParenthesisToken);
 
-            Log.PARSER($"Exit ParenthesizedExpressionSyntax", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new ParenthesizedExpressionSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new ParenthesizedExpressionSyntax(left, expression, right);
         }
@@ -409,7 +412,7 @@ namespace Minsk.CodeAnalysis.Syntax
             var isTrue = Current.Kind == SyntaxKind.TrueKeyword;
             var keywordToken = isTrue ? MatchToken(SyntaxKind.TrueKeyword) : MatchToken(SyntaxKind.FalseKeyword);
 
-            Log.PARSER($"Exit LiteralExpressionSyntax", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new LiteralExpressionSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new LiteralExpressionSyntax(keywordToken, isTrue);
         }
@@ -420,7 +423,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
             var numberToken = MatchToken(SyntaxKind.NumberToken);
 
-            Log.PARSER($"Exit LiteralExpressionSyntax", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new LiteralExpressionSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new LiteralExpressionSyntax(numberToken);
         }
@@ -431,7 +434,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
             var identifierToken = MatchToken(SyntaxKind.IdentifierToken);
 
-            Log.PARSER($"Exit NameExpressionSyntax", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new NameExpressionSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new NameExpressionSyntax(identifierToken);
         }

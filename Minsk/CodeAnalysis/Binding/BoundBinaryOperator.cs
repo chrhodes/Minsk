@@ -80,7 +80,7 @@ namespace Minsk.CodeAnalysis.Binding
                 }
             }
 
-            Log.BINDER($"Exit (null)", Common.LOG_CATEGORY, startTicks);
+            Log.BINDER($"Exit null", Common.LOG_CATEGORY, startTicks);
 
             return null;
         }
