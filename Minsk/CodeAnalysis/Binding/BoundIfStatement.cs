@@ -8,7 +8,7 @@ namespace Minsk.CodeAnalysis.Binding
     {
         public BoundIfStatement(BoundExpression condition, BoundStatement thenStatement, BoundStatement elseStatement)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: condition:{condition.Kind} thenStatement:{thenStatement.Kind} elseStatement:{elseStatement.Kind}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter condition:{condition.Kind} thenStatement:{thenStatement.Kind} elseStatement:{elseStatement.Kind}", Common.LOG_CATEGORY);
 
 
             Condition = condition;

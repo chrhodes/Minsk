@@ -25,7 +25,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public Lexer(SourceText text)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: text:>{text}<", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter text:>{text}<", Common.LOG_CATEGORY);
 
             _text = text;
 
@@ -233,7 +233,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 text = _text.ToString(_start, length);
             }
 
-            Log.LEXER($"Exit: new SyntaxToken({_kind},{_start},{text},{_value})", Common.LOG_CATEGORY, startTicks);
+            Log.LEXER($"Exit new SyntaxToken({_kind},{_start},{text},{_value})", Common.LOG_CATEGORY, startTicks);
 
             return new SyntaxToken(_kind, _start, text, _value);
         }

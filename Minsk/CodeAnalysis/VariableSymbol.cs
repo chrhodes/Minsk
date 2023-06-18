@@ -8,7 +8,7 @@ namespace Minsk.CodeAnalysis
     {
         internal VariableSymbol(string name, bool isReadOnly, Type type)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: name:{name}, isReadOnly:{isReadOnly} type:{type}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter name:{name}, isReadOnly:{isReadOnly} type:{type}", Common.LOG_CATEGORY);
 
             Name = name;
             IsReadOnly = isReadOnly;

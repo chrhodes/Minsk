@@ -18,7 +18,7 @@ namespace Minsk.CodeAnalysis
         public Compilation(SyntaxTree syntaxTree)
             : this(null, syntaxTree)
         {
-            //Int64 startTicks = Log.CONSTRUCTOR($"Enter: syntax:{syntaxTree}", Common.LOG_CATEGORY);
+            //Int64 startTicks = Log.CONSTRUCTOR($"Enter syntax:{syntaxTree}", Common.LOG_CATEGORY);
 
 
             //Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
@@ -26,7 +26,7 @@ namespace Minsk.CodeAnalysis
 
         private Compilation(Compilation previous, SyntaxTree syntaxTree)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: previous:{previous} syntax:{syntaxTree}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter previous:{previous} syntax:{syntaxTree}", Common.LOG_CATEGORY);
 
             Previous = previous;
             SyntaxTree = syntaxTree;

@@ -8,7 +8,7 @@ namespace Minsk.CodeAnalysis.Binding
     {
         public BoundForStatement(VariableSymbol variable, BoundExpression lowerBound, BoundExpression upperBound, BoundStatement body)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: variable:{variable.Name} lowerBound:{lowerBound.Kind} upperBound:{upperBound.Kind} body:{body.Kind}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter variable:{variable.Name} lowerBound:{lowerBound.Kind} upperBound:{upperBound.Kind} body:{body.Kind}", Common.LOG_CATEGORY);
 
             Variable = variable;
             LowerBound = lowerBound;

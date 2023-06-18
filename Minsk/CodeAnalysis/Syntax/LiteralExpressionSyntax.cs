@@ -10,7 +10,7 @@ namespace Minsk.CodeAnalysis.Syntax
         public LiteralExpressionSyntax(SyntaxToken literalToken)
             : this(literalToken, literalToken.Value)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: literalToken:{literalToken.Kind}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter literalToken:{literalToken.Kind}", Common.LOG_CATEGORY);
 
 
             Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
@@ -18,7 +18,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public LiteralExpressionSyntax(SyntaxToken literalToken, object value)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: literalToken:{literalToken.Kind} value:{value}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter literalToken:{literalToken.Kind} value:{value}", Common.LOG_CATEGORY);
 
             LiteralToken = literalToken;
             Value = value;

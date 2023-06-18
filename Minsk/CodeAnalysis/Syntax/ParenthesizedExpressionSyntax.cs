@@ -9,7 +9,7 @@ namespace Minsk.CodeAnalysis.Syntax
     {
         public ParenthesizedExpressionSyntax(SyntaxToken openParenthesisToken, ExpressionSyntax expression, SyntaxToken closeParenthesisToken)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: openParenthesisToken:{openParenthesisToken.Text} expression: {expression.Kind} closeParenthesisToken: {closeParenthesisToken.Text}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter openParenthesisToken:{openParenthesisToken.Text} expression: {expression.Kind} closeParenthesisToken: {closeParenthesisToken.Text}", Common.LOG_CATEGORY);
 
             OpenParenthesisToken = openParenthesisToken;
             Expression = expression;

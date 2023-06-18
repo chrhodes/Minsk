@@ -19,7 +19,7 @@ namespace Minsk.CodeAnalysis
 
         public Evaluator(BoundStatement root, Dictionary<VariableSymbol, object> variables)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: root:{root.Kind} varables:{variables.Count}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter root:{root.Kind} varables:{variables.Count}", Common.LOG_CATEGORY);
 
             _root = root;
             _variables = variables;

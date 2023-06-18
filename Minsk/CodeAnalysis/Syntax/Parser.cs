@@ -22,7 +22,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public Parser(SourceText text)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: text:>{text}<", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter text:>{text}<", Common.LOG_CATEGORY);
 
             var tokens = new List<SyntaxToken>();
             var lexer = new Lexer(text);
@@ -60,12 +60,12 @@ namespace Minsk.CodeAnalysis.Syntax
 
             if (index >= _tokens.Length)
             {
-                Log.PARSER($"Exit: ({_tokens[_tokens.Length - 1].Kind})", Common.LOG_CATEGORY, startTicks);
+                Log.PARSER($"Exit ({_tokens[_tokens.Length - 1].Kind})", Common.LOG_CATEGORY, startTicks);
 
                 return _tokens[_tokens.Length - 1];
             }
 
-            Log.PARSER($"Exit: ({_tokens[index].Kind})", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit ({_tokens[index].Kind})", Common.LOG_CATEGORY, startTicks);
 
             return _tokens[index];
         }
@@ -79,7 +79,7 @@ namespace Minsk.CodeAnalysis.Syntax
             var current = Current;
             _position++;
 
-            Log.PARSER($"Exit: ({current.Kind})", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit ({current.Kind})", Common.LOG_CATEGORY, startTicks);
 
             return current;
         }

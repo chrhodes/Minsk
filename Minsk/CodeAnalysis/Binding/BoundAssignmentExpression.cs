@@ -8,7 +8,7 @@ namespace Minsk.CodeAnalysis.Binding
     {
         public BoundAssignmentExpression(VariableSymbol variable, BoundExpression expression)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: variable:{variable.Name}, expression:{expression.Kind}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter variable:{variable.Name}, expression:{expression.Kind}", Common.LOG_CATEGORY);
 
             Variable = variable;
             Expression = expression;

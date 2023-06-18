@@ -8,7 +8,7 @@ namespace Minsk.CodeAnalysis.Syntax
     {
         public UnaryExpressionSyntax(SyntaxToken operatorToken, ExpressionSyntax operand)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: operatorToken: {operatorToken.Kind} operand: {operand.Kind}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter operatorToken: {operatorToken.Kind} operand: {operand.Kind}", Common.LOG_CATEGORY);
 
             OperatorToken = operatorToken;
             Operand = operand;

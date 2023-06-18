@@ -9,7 +9,7 @@ namespace Minsk.CodeAnalysis.Binding
     {
         public BoundVariableDeclaration(VariableSymbol variable, BoundExpression initializer)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: variable:{variable.Name}, initializer:{initializer.Kind}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter variable:{variable.Name}, initializer:{initializer.Kind}", Common.LOG_CATEGORY);
 
             Variable = variable;
             Initializer = initializer;
