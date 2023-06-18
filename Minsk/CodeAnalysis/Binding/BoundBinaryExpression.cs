@@ -8,7 +8,7 @@ namespace Minsk.CodeAnalysis.Binding
     {
         public BoundBinaryExpression(BoundExpression left, BoundBinaryOperator op, BoundExpression right)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: left: {left} op: {op} right: {right}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter left: {left.Kind} op: {op.Kind} right: {right.Kind}", Common.LOG_CATEGORY);
 
             Left = left;
             Op = op;

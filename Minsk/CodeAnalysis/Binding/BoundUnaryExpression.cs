@@ -8,7 +8,7 @@ namespace Minsk.CodeAnalysis.Binding
     {
         public BoundUnaryExpression(BoundUnaryOperator op, BoundExpression operand)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: op:{op} operand:{operand}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter op:{op.Kind} operand:{operand.Kind}", Common.LOG_CATEGORY);
 
             Op= op;
             Operand = operand;

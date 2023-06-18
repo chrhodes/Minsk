@@ -1,5 +1,6 @@
 using System;
-using System.Linq;
+
+using VNC;
 
 namespace Minsk.CodeAnalysis
 {
@@ -7,8 +8,12 @@ namespace Minsk.CodeAnalysis
     {
         public TextSpan(int start, int length)
         {
+            Int64 startTicks = Log.Trace($"Enter", Common.LOG_CATEGORY);
+
             Start = start;
             Length = length;
+
+            Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public int Start { get; }

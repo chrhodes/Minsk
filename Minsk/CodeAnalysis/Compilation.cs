@@ -14,7 +14,7 @@ namespace Minsk.CodeAnalysis
 
         public Compilation(SyntaxTree syntaxTree)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: syntax:{syntaxTree}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter syntax:{syntaxTree}", Common.LOG_CATEGORY);
 
             SyntaxTree = syntaxTree;
 

@@ -14,7 +14,7 @@ namespace Minsk.CodeAnalysis
 
         public Evaluator(BoundExpression root, Dictionary<VariableSymbol, object> variables)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: root:{root}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter root:{root.Kind} varables:{variables.Count}", Common.LOG_CATEGORY);
 
             _root = root;
             _variables = variables;
@@ -25,6 +25,7 @@ namespace Minsk.CodeAnalysis
         public object Evaluate()
         {
             Int64 startTicks = Log.EVALUATOR($"Enter", Common.LOG_CATEGORY);
+
             Log.EVALUATOR($"Exit", Common.LOG_CATEGORY, startTicks);
 
             return EvaluateExpression(_root);
@@ -32,7 +33,7 @@ namespace Minsk.CodeAnalysis
 
         private object EvaluateExpression(BoundExpression node)
         {
-            Int64 startTicks = Log.EVALUATOR($"Enter node: {node}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.EVALUATOR($"Enter node: {node.Kind}", Common.LOG_CATEGORY);
 
             if (node is BoundLiteralExpression n)
             {

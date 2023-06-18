@@ -9,7 +9,7 @@ namespace Minsk.CodeAnalysis.Syntax
     {
         public NameExpressionSyntax(SyntaxToken identifierToken)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: identifierToken:{identifierToken}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter identifierToken:{identifierToken.Kind}", Common.LOG_CATEGORY);
 
             IdentifierToken = identifierToken;
 

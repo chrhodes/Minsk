@@ -8,7 +8,7 @@ namespace Minsk.CodeAnalysis.Binding
     {
         public BoundLiteralExpression(object value)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: value:{value}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter value:{value}", Common.LOG_CATEGORY);
 
             Value = value;
 
