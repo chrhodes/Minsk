@@ -11,17 +11,17 @@ namespace Minsk.CodeAnalysis.Binding
         public BoundBinaryOperator(SyntaxKind syntaxKind, BoundBinaryOperatorKind kind, Type type)
             : this(syntaxKind, kind, type, type, type)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: syntaxKind:{syntaxKind} kind:{kind} type:{type}", Common.LOG_CATEGORY);
+            //Int64 startTicks = Log.CONSTRUCTOR($"Enter: syntaxKind:{syntaxKind} kind:{kind} type:{type}", Common.LOG_CATEGORY);
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            //Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public BoundBinaryOperator(SyntaxKind syntaxKind, BoundBinaryOperatorKind kind, Type operandType, Type resultType)
             : this(syntaxKind, kind, operandType, operandType, resultType)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: syntaxKind:{syntaxKind} kind:{kind} operandType:{operandType} resultType:{resultType}", Common.LOG_CATEGORY);
+            //Int64 startTicks = Log.CONSTRUCTOR($"Enter: syntaxKind:{syntaxKind} kind:{kind} operandType:{operandType} resultType:{resultType}", Common.LOG_CATEGORY);
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            //Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public BoundBinaryOperator(SyntaxKind syntaxKind, BoundBinaryOperatorKind kind, Type leftType, Type rightType, Type resultType)

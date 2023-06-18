@@ -18,10 +18,10 @@ namespace Minsk.CodeAnalysis
         public Compilation(SyntaxTree syntaxTree)
             : this(null, syntaxTree)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: syntax:{syntaxTree}", Common.LOG_CATEGORY);
+            //Int64 startTicks = Log.CONSTRUCTOR($"Enter: syntax:{syntaxTree}", Common.LOG_CATEGORY);
 
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            //Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         private Compilation(Compilation previous, SyntaxTree syntaxTree)
