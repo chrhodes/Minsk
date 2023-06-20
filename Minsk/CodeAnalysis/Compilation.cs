@@ -61,7 +61,7 @@ namespace Minsk.CodeAnalysis
         public Compilation ContinueWith(SyntaxTree syntaxTree)
         {
             Int64 startTicks = Log.COMPILER($"Enter", Common.LOG_CATEGORY);
-            Log.COMPILER($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.COMPILER($"Exit new Compilation()", Common.LOG_CATEGORY, startTicks);
 
             return new Compilation(this, syntaxTree);
         }
@@ -74,7 +74,7 @@ namespace Minsk.CodeAnalysis
 
             if (diagnostics.Any())
             {
-                Log.COMPILER($"Exit", Common.LOG_CATEGORY, startTicks);
+                Log.COMPILER($"Exit new EvaluationResult()", Common.LOG_CATEGORY, startTicks);
 
                 return new EvaluationResult(diagnostics, null);
             }
@@ -82,7 +82,7 @@ namespace Minsk.CodeAnalysis
             var evaluator = new Evaluator(GlobalScope.Statement, variables);
             var value = evaluator.Evaluate();
 
-            Log.COMPILER($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.COMPILER($"Exit new EvaluationResult()", Common.LOG_CATEGORY, startTicks);
 
             return new EvaluationResult(ImmutableArray<Diagnostic>.Empty, value);
         }

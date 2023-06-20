@@ -49,7 +49,7 @@ namespace Minsk.CodeAnalysis.Binding
                 if (op.SyntaxKind == syntaxKind
                     && op.OperandType == operandType)
                 {
-                    Log.BINDER($"Exit op:{op.Kind}", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit {op.Kind}", Common.LOG_CATEGORY, startTicks);
 
                     return op;
                 }

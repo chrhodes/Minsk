@@ -1,4 +1,9 @@
+using System;
 using System.Collections.Immutable;
+
+using VNC;
+
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Minsk.CodeAnalysis.Text
 {
@@ -9,8 +14,12 @@ namespace Minsk.CodeAnalysis.Text
 
         private SourceText(string text)
         {
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter text:{text}", Common.LOG_CATEGORY);
+
             _text = text;
             Lines = ParseLines(this, text);
+
+            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public ImmutableArray<TextLine> Lines { get; }
@@ -24,6 +33,8 @@ namespace Minsk.CodeAnalysis.Text
         // versus a linear progression to we find the line containing the position
         public int GetLineIndex(int position)
         {
+            Int64 startTicks = Log.Trace($"Enter position:{position}", Common.LOG_CATEGORY);
+
             var lower = 0;
             var upper = Lines.Length - 1;
 
@@ -34,6 +45,8 @@ namespace Minsk.CodeAnalysis.Text
 
                 if (position == start)
                 {
+                    Log.Trace($"Exit {index}", Common.LOG_CATEGORY, startTicks);
+
                     return index;
                 }
 
@@ -51,11 +64,15 @@ namespace Minsk.CodeAnalysis.Text
 
             // We found the line
 
+            Log.Trace($"Exit {lower - 1}", Common.LOG_CATEGORY, startTicks);
+
             return lower - 1;
         }
 
         private static ImmutableArray<TextLine> ParseLines(SourceText sourceText, string text)
         {
+            Int64 startTicks = Log.Trace($"Enter sourceText:{sourceText}, text:{text}", Common.LOG_CATEGORY);
+
             var result = ImmutableArray.CreateBuilder<TextLine>();
             var position = 0;
             var lineStart = 0;
@@ -82,38 +99,56 @@ namespace Minsk.CodeAnalysis.Text
                 AddLine(result, sourceText, position, lineStart, 0);
             }
 
+            Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+
             return result.ToImmutable();
         }
 
         private static void AddLine(ImmutableArray<TextLine>.Builder result, SourceText sourceText, int position, int lineStart, int lineBreakWidth)
         {
+            Int64 startTicks = Log.Trace($"Enter result:{result}, sourceText:{sourceText}, position:{position}, lineStart:{lineStart}, lineBreakWidth:{lineBreakWidth}", Common.LOG_CATEGORY);
+
             var lineLength = position - lineStart;
             var lineLengthIncludingLineBreak = lineLength + lineBreakWidth;
             var line = new TextLine(sourceText, lineStart, lineLength, lineLengthIncludingLineBreak);
+
+            Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
 
             result.Add(line);
         }
 
         private static int GetLineBreakWidth(string text, int position)
         {
+            Int64 startTicks = Log.Trace($"Enter text:{text}, position:{position}", Common.LOG_CATEGORY);
+
             var c = text[position];
             var l = position + 1 >= text.Length ? '\0' : text[position + 1];
 
             if (c == '\r' && l == '\n')
             {
+                Log.Trace($"Exit 2", Common.LOG_CATEGORY, startTicks);
+
                 return 2;
             }
 
             if (c == '\r' || c == '\n')
             {
+                Log.Trace($"Exit 1", Common.LOG_CATEGORY, startTicks);
+
                 return 1;
             }
+
+            Log.Trace($"Exit 0", Common.LOG_CATEGORY, startTicks);
 
             return 0;
         }
 
         public static SourceText From(string text)
         {
+            Int64 startTicks = Log.Trace($"Enter text:{text}", Common.LOG_CATEGORY);
+
+            Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+
             return new SourceText(text);
         }
 

@@ -15,7 +15,7 @@ namespace Minsk.CodeAnalysis.Binding
 
         public BoundScope(BoundScope parent)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter parent:{parent}", Common.LOG_CATEGORY);
 
             Parent = parent;
 
@@ -24,7 +24,7 @@ namespace Minsk.CodeAnalysis.Binding
 
         public bool TryDeclare(VariableSymbol variable)
         {
-            Int64 startTicks = Log.BINDER($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter variable:{variable}", Common.LOG_CATEGORY);
 
             // var x = 10
             // {
@@ -47,7 +47,7 @@ namespace Minsk.CodeAnalysis.Binding
 
         public bool TryLookup(string name, out VariableSymbol variable)
         {
-            Int64 startTicks = Log.BINDER($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter name:{name}", Common.LOG_CATEGORY);
 
             if (_variables.TryGetValue(name, out variable))
             {
@@ -63,7 +63,7 @@ namespace Minsk.CodeAnalysis.Binding
                 return false;
             }
 
-            Log.BINDER($"Exit Parent.TryLookup({name})", Common.LOG_CATEGORY, startTicks);
+            Log.BINDER($"Exit Parent.TryLookup()", Common.LOG_CATEGORY, startTicks);
 
             return Parent.TryLookup(name, out variable);
         }

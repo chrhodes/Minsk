@@ -1,3 +1,8 @@
+using Newtonsoft.Json.Linq;
+using System;
+
+using VNC;
+
 namespace Minsk.CodeAnalysis.Syntax
 {
 
@@ -10,6 +15,8 @@ namespace Minsk.CodeAnalysis.Syntax
         public ForStatementSyntax(SyntaxToken keyword, SyntaxToken identifier, SyntaxToken equalsToken,
             ExpressionSyntax lowerBound, SyntaxToken toKeyword, ExpressionSyntax upperBound, StatementSyntax body)
         {
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter keyword:{keyword.Kind}, identifier:{identifier.Kind}, equalsToken:{equalsToken.Kind}, lowerBound:{lowerBound.Kind}, toKeyword:{toKeyword.Kind}, upperBound:{upperBound.Kind}, body:{body.Kind}", Common.LOG_CATEGORY);
+
             Keyword = keyword;
             Identifier = identifier;
             EqualsToken = equalsToken;
@@ -17,6 +24,8 @@ namespace Minsk.CodeAnalysis.Syntax
             ToKeyword = toKeyword;
             UpperBound = upperBound;
             Body = body;
+
+            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public override SyntaxKind Kind => SyntaxKind.ForStatement;

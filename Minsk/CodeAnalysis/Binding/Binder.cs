@@ -37,7 +37,7 @@ namespace Minsk.CodeAnalysis.Binding
                 diagnostics = diagnostics.InsertRange(0, previous.Diagnostics);
             }
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.CONSTRUCTOR($"Exit new BoundGlobalScope()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundGlobalScope(previous, diagnostics, variables, statement);
         }
@@ -134,7 +134,7 @@ namespace Minsk.CodeAnalysis.Binding
 
             _scope = _scope.Parent;
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.CONSTRUCTOR($"Exit new BoundBlockStatement()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundBlockStatement(statements.ToImmutable());
         }
@@ -153,7 +153,7 @@ namespace Minsk.CodeAnalysis.Binding
                 _diagnostics.ReportVariableAlreadyDeclared(syntax.Identifier.Span, name);
             }
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.CONSTRUCTOR($"Exit new BoundVariableDeclaration()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundVariableDeclaration(variable, initializer);
         }
@@ -168,7 +168,7 @@ namespace Minsk.CodeAnalysis.Binding
                 ? null
                 : BindStatement(syntax.ElseClause.ElseStatement);
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.CONSTRUCTOR($"Exit new BoundIfStatemen()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundIfStatement(condition, thenStatement, elseStatement);
         }
@@ -180,7 +180,7 @@ namespace Minsk.CodeAnalysis.Binding
             var condition = BindExpression(syntax.Condition, typeof(Boolean));
             var body = BindStatement(syntax.Body);
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.CONSTRUCTOR($"Exit new BoundWhileStatemen()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundWhileStatement(condition, body);
         }
@@ -206,7 +206,7 @@ namespace Minsk.CodeAnalysis.Binding
 
             _scope = _scope.Parent;
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.CONSTRUCTOR($"Exit new BoundForStatement()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundForStatement(variable, lowerBound, upperBound, body);
         }
@@ -217,7 +217,7 @@ namespace Minsk.CodeAnalysis.Binding
 
             var expression = BindExpression(syntax.Expression);
 
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.CONSTRUCTOR($"Exit new BoundExpressionStatement()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundExpressionStatement(expression);
         }
@@ -233,8 +233,7 @@ namespace Minsk.CodeAnalysis.Binding
                 _diagnostics.ReportCannotConvert(syntax.Span, result.Type, targetType);
             }
 
-
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.CONSTRUCTOR($"Exit {result.Kind}", Common.LOG_CATEGORY, startTicks);
 
             return result;
         }

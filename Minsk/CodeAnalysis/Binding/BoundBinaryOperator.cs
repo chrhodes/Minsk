@@ -74,7 +74,7 @@ namespace Minsk.CodeAnalysis.Binding
                     && op.LeftType == leftType
                     && op.RightType == rightType)
                 {
-                    Log.BINDER($"Exit op:{op}", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit {op.Kind}", Common.LOG_CATEGORY, startTicks);
 
                     return op;
                 }

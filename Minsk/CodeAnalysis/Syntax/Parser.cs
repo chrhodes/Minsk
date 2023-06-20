@@ -210,7 +210,7 @@ namespace Minsk.CodeAnalysis.Syntax
             var equals = MatchToken(SyntaxKind.EqualsToken);
             var initializer = ParseExpression();
 
-            Log.PARSER($"Exit ParseExpressionStatement()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new VariableDeclarationSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new VariableDeclarationSyntax(keyword, identifier, equals, initializer);
         }
@@ -224,7 +224,8 @@ namespace Minsk.CodeAnalysis.Syntax
             var statement = ParseStatement();
             var elseClause = ParseElseClause();
 
-            Log.PARSER($"Exit ParseExpressionStatement()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new IfStatementSyntax()", Common.LOG_CATEGORY, startTicks);
+
             return new IfStatementSyntax(keyword, condition, statement, elseClause);
         }
 
@@ -240,7 +241,7 @@ namespace Minsk.CodeAnalysis.Syntax
             var keyword = NextToken();
             var statement = ParseStatement();
 
-            Log.PARSER($"Exit ParseExpressionStatement()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new ElseClauseSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new ElseClauseSyntax(keyword, statement);
         }
@@ -253,7 +254,7 @@ namespace Minsk.CodeAnalysis.Syntax
             var condition = ParseExpression();
             var body = ParseStatement();
 
-            Log.PARSER($"Exit ParseExpressionStatement()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new WhileStatementSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new WhileStatementSyntax(keyword, condition, body);
         }
@@ -270,7 +271,7 @@ namespace Minsk.CodeAnalysis.Syntax
             var upperBound = ParseExpression();
             var body = ParseStatement();
 
-            Log.PARSER($"Exit ParseExpressionStatement()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new ForStatementSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new ForStatementSyntax(keyword, identifier, equalsToken, lowerBound, toKeyword, upperBound, body);
         }
@@ -281,7 +282,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
             var expression = ParseExpression();
 
-            Log.PARSER($"Exit ParseExpressionStatement()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new ExpressionStatementSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new ExpressionStatementSyntax(expression);
         }
@@ -293,7 +294,7 @@ namespace Minsk.CodeAnalysis.Syntax
         {
             Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
 
-            Log.PARSER($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new ParseAssignmentExpression()", Common.LOG_CATEGORY, startTicks);
 
             return ParseAssignmentExpression();
         }
@@ -312,19 +313,19 @@ namespace Minsk.CodeAnalysis.Syntax
                 var operatorToken = NextToken();
                 var right = ParseAssignmentExpression();
 
-                Log.PARSER($"Exit ParseAssignmentExpression()", Common.LOG_CATEGORY, startTicks);
+                Log.PARSER($"Exit new AssignmentExpressionSyntax()", Common.LOG_CATEGORY, startTicks);
 
                 return new AssignmentExpressionSyntax(identifierToken, operatorToken, right);
             }
 
-            Log.PARSER($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new ParseBinaryExpression()", Common.LOG_CATEGORY, startTicks);
 
             return ParseBinaryExpression();
         }
 
         private ExpressionSyntax ParseBinaryExpression(int parentPrecedence = 0)
         {
-            Int64 startTicks = Log.PARSER($"Enter parentPrecedence: ({parentPrecedence})", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.PARSER($"Enter parentPrecedence:{parentPrecedence}", Common.LOG_CATEGORY);
 
             ExpressionSyntax left;
 
