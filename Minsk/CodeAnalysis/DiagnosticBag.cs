@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Minsk.CodeAnalysis.Syntax;
 using Minsk.CodeAnalysis.Text;
 
-using VNC.Logging.TraceListeners;
 using VNC;
 
 namespace Minsk.CodeAnalysis

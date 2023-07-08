@@ -54,7 +54,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         private SyntaxToken Peek(int offset)
         {
-            Int64 startTicks = Log.PARSER($"Enter offset:{offset}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.PARSER_LOW($"Enter offset:{offset}", Common.LOG_CATEGORY);
 
             var index = _position + offset;
 
@@ -65,7 +65,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 return _tokens[_tokens.Length - 1];
             }
 
-            Log.PARSER($"Exit {_tokens[index].Kind}", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER_LOW($"Exit {_tokens[index].Kind}", Common.LOG_CATEGORY, startTicks);
 
             return _tokens[index];
         }
@@ -74,12 +74,12 @@ namespace Minsk.CodeAnalysis.Syntax
 
         private SyntaxToken NextToken()
         {
-            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.PARSER_LOW($"Enter", Common.LOG_CATEGORY);
 
             var current = Current;
             _position++;
 
-            Log.PARSER($"Exit {current.Kind}", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER_LOW($"Exit {current.Kind}", Common.LOG_CATEGORY, startTicks);
 
             return current;
         }
