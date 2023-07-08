@@ -22,11 +22,11 @@ namespace Minsk.CodeAnalysis.Text
 
         public static TextSpan FromBounds(int start, int end)
         {
-            Int64 startTicks = Log.Trace($"Enter start:{start}, end:{end}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.TEXT($"Enter start:{start}, end:{end}", Common.LOG_CATEGORY);
 
             var length = end - start;
 
-            Log.Trace($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.TEXT($"Exit", Common.LOG_CATEGORY, startTicks);
 
             return new TextSpan(start, length);
         }
