@@ -233,7 +233,7 @@ namespace Minsk.CodeAnalysis.Syntax
                 text = _text.ToString(_start, length);
             }
 
-            Log.LEXER($"Exit new SyntaxToken({_kind},{_start},{text},{_value})", Common.LOG_CATEGORY, startTicks);
+            Log.LEXER($"Exit new SyntaxToken()", Common.LOG_CATEGORY, startTicks);
 
             return new SyntaxToken(_kind, _start, text, _value);
         }
