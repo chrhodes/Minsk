@@ -30,7 +30,7 @@ namespace Minsk.CodeAnalysis.Text
 
         // NOTE(crhodes)
         // Do a binary search to make this a bit more efficient
-        // versus a linear progression to we find the line containing the position
+        // versus a linear progression to find the line containing the position
         public int GetLineIndex(int position)
         {
             Int64 startTicks = Log.TEXT_LOW($"Enter position:{position}", Common.LOG_CATEGORY);
@@ -112,9 +112,9 @@ namespace Minsk.CodeAnalysis.Text
             var lineLengthIncludingLineBreak = lineLength + lineBreakWidth;
             var line = new TextLine(sourceText, lineStart, lineLength, lineLengthIncludingLineBreak);
 
-            Log.TEXT($"Exit", Common.LOG_CATEGORY, startTicks);
-
             result.Add(line);
+
+            Log.TEXT($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         private static int GetLineBreakWidth(string text, int position)
