@@ -26,7 +26,7 @@ namespace Minsk.CodeAnalysis.Text
 
             var length = end - start;
 
-            Log.TEXT($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.TEXT($"Exit new TextSpan()", Common.LOG_CATEGORY, startTicks);
 
             return new TextSpan(start, length);
         }

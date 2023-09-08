@@ -24,6 +24,8 @@ namespace Minsk.CodeAnalysis.Syntax
         public SyntaxToken EqualsToken { get; }
         public ExpressionSyntax Expression { get; }
 
+        // NOTE(crhodes)
+        // This got replaced with non-abstract implementation in SyntaxNode
 
         //public override IEnumerable<SyntaxNode> GetChildren()
         //{

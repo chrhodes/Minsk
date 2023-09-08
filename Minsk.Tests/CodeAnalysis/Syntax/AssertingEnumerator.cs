@@ -60,12 +60,6 @@ namespace Minsk.Tests.CodeAnalysis.Syntax
             {
                 throw;
             }
-
-            //catch
-            //{
-            //    _hasErrors = true;
-            //    throw;
-            //}
         }
 
         public void AssertToken(SyntaxKind kind, string text)
@@ -73,22 +67,21 @@ namespace Minsk.Tests.CodeAnalysis.Syntax
             try
             {
                 Assert.True(_enumerator.MoveNext());
+
+                // NOTE(crhodes)
+                // Assert Kind before Type
+                // So fail with a better error message
+
                 Assert.Equal(kind, _enumerator.Current.Kind);
 
                 var token = Assert.IsType<SyntaxToken>(_enumerator.Current);
 
                 Assert.Equal(text, token.Text);
             }
-            catch when (MarkFailed())
+            catch when (MarkFailed())   // Never catch exception but mark failed
             {
                 throw;
             }
-
-            //catch
-            //{
-            //    _hasErrors = true;
-            //    throw;
-            //}
         }
 
         public void Dispose()

@@ -30,6 +30,9 @@ namespace Minsk.CodeAnalysis.Syntax
         public SyntaxToken LiteralToken { get; }
         public object Value { get; }
 
+        // NOTE(crhodes)
+        // This got replaced with non-abstract implementation in SyntaxNode
+
         //public override IEnumerable<SyntaxNode> GetChildren()
         //{
         //    yield return LiteralToken;

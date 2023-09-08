@@ -60,7 +60,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
             if (index >= _tokens.Length)
             {
-                Log.PARSER($"Exit ({_tokens[_tokens.Length - 1].Kind})", Common.LOG_CATEGORY, startTicks);
+                Log.PARSER_LOW($"Exit ({_tokens[_tokens.Length - 1].Kind})", Common.LOG_CATEGORY, startTicks);
 
                 return _tokens[_tokens.Length - 1];
             }
@@ -107,7 +107,7 @@ namespace Minsk.CodeAnalysis.Syntax
             // NOTE(crhodes)
             // This is super useful because ...
 
-            Log.PARSER($"Exit new SyntaxToken({kind})", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new SyntaxToken()", Common.LOG_CATEGORY, startTicks);
 
             return new SyntaxToken(kind, Current.Position, null, null);
         }
