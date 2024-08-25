@@ -22,7 +22,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public Parser(SourceText text)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: text: ({text})", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter text:{text}", Common.LOG_CATEGORY);
 
             var tokens = new List<SyntaxToken>();
             var lexer = new Lexer(text);
@@ -54,18 +54,18 @@ namespace Minsk.CodeAnalysis.Syntax
 
         private SyntaxToken Peek(int offset)
         {
-            Int64 startTicks = Log.PARSER($"Enter offset: ({offset})", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.PARSER_LOW($"Enter offset:{offset}", Common.LOG_CATEGORY);
 
             var index = _position + offset;
 
             if (index >= _tokens.Length)
             {
-                Log.PARSER($"Exit: ({_tokens[_tokens.Length - 1].Kind})", Common.LOG_CATEGORY, startTicks);
+                Log.PARSER_LOW($"Exit ({_tokens[_tokens.Length - 1].Kind})", Common.LOG_CATEGORY, startTicks);
 
                 return _tokens[_tokens.Length - 1];
             }
 
-            Log.PARSER($"Exit: ({_tokens[index].Kind})", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER_LOW($"Exit {_tokens[index].Kind}", Common.LOG_CATEGORY, startTicks);
 
             return _tokens[index];
         }
@@ -74,25 +74,32 @@ namespace Minsk.CodeAnalysis.Syntax
 
         private SyntaxToken NextToken()
         {
-            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.PARSER_LOW($"Enter", Common.LOG_CATEGORY);
 
             var current = Current;
             _position++;
 
-            Log.PARSER($"Exit: ({current.Kind})", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER_LOW($"Exit {current.Kind}", Common.LOG_CATEGORY, startTicks);
 
             return current;
         }
 
         private SyntaxToken MatchToken(SyntaxKind kind)
         {
-            Int64 startTicks = Log.PARSER($"Enter kind: ({kind})", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.PARSER($"Enter kind:{kind}", Common.LOG_CATEGORY);
 
             if (Current.Kind == kind)
             {
-                Log.PARSER($"Exit Current.Kind == kind", Common.LOG_CATEGORY, startTicks);
+                // HACK(crhodes)
+                // This is so we can print the kind
 
-                return NextToken();
+                var nextT = NextToken();
+
+                Log.PARSER($"Exit {nextT.Kind}", Common.LOG_CATEGORY, startTicks);
+
+                return nextT;
+
+                //return NextToken();
             }
 
             _diagnostics.ReportUnexpectedToken(Current.Span, Current.Kind, kind);
@@ -112,38 +119,54 @@ namespace Minsk.CodeAnalysis.Syntax
             var statement = ParseStatement();
             var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
 
-            Log.PARSER($"Exit new SyntaxTree()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new CompilationUnitSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new CompilationUnitSyntax(statement, endOfFileToken);
         }
 
         private StatementSyntax ParseStatement()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             switch (Current.Kind)
             {
                 case SyntaxKind.OpenBraceToken:
+                    Log.PARSER($"Exit ParseBlockStatement()", Common.LOG_CATEGORY, startTicks);
+
                     return ParseBlockStatement();
 
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.VarKeyword:
+                    Log.PARSER($"Exit ParseVariableDeclaration()", Common.LOG_CATEGORY, startTicks);
+
                     return ParseVariableDeclaration();
 
                 case SyntaxKind.IfKeyword:
+                    Log.PARSER($"Exit ParseIfStatement()", Common.LOG_CATEGORY, startTicks);
+
                     return ParseIfStatement();
 
                 case SyntaxKind.WhileKeyword:
+                    Log.PARSER($"Exit ParseWhileStatement()", Common.LOG_CATEGORY, startTicks);
+
                     return ParseWhileStatement();
 
                 case SyntaxKind.ForKeyword:
+                    Log.PARSER($"Exit ParseForStatement()", Common.LOG_CATEGORY, startTicks);
+
                     return ParseForStatement();
 
                 default:
+                    Log.PARSER($"Exit ParseExpressionStatement()", Common.LOG_CATEGORY, startTicks);
+
                     return ParseExpressionStatement();
             }
         }
 
         private BlockStatementSyntax ParseBlockStatement()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             var statements = ImmutableArray.CreateBuilder<StatementSyntax>();
 
             var openBraceToken = MatchToken(SyntaxKind.OpenBraceToken);
@@ -171,11 +194,15 @@ namespace Minsk.CodeAnalysis.Syntax
 
             var closeBraceToken = MatchToken(SyntaxKind.CloseBraceToken);
 
+            Log.PARSER($"Exit new BlockStatementSyntax()", Common.LOG_CATEGORY, startTicks);
+
             return new BlockStatementSyntax(openBraceToken, statements.ToImmutable(), closeBraceToken);
         }
 
         private StatementSyntax ParseVariableDeclaration()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             var expected = Current.Kind == SyntaxKind.LetKeyword ? SyntaxKind.LetKeyword : SyntaxKind.VarKeyword;
 
             var keyword = MatchToken(expected);
@@ -183,43 +210,59 @@ namespace Minsk.CodeAnalysis.Syntax
             var equals = MatchToken(SyntaxKind.EqualsToken);
             var initializer = ParseExpression();
 
+            Log.PARSER($"Exit new VariableDeclarationSyntax()", Common.LOG_CATEGORY, startTicks);
+
             return new VariableDeclarationSyntax(keyword, identifier, equals, initializer);
         }
 
         private StatementSyntax ParseIfStatement()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             var keyword = MatchToken(SyntaxKind.IfKeyword);
             var condition = ParseExpression();
             var statement = ParseStatement();
             var elseClause = ParseElseClause();
+
+            Log.PARSER($"Exit new IfStatementSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new IfStatementSyntax(keyword, condition, statement, elseClause);
         }
 
         private ElseClauseSyntax ParseElseClause()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             if (Current.Kind != SyntaxKind.ElseKeyword)
             {
                 return null;
             }
 
             var keyword = NextToken();
-            var statement = ParseStatement()
-;
+            var statement = ParseStatement();
+
+            Log.PARSER($"Exit new ElseClauseSyntax()", Common.LOG_CATEGORY, startTicks);
+
             return new ElseClauseSyntax(keyword, statement);
         }
 
         private StatementSyntax ParseWhileStatement()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             var keyword = MatchToken(SyntaxKind.WhileKeyword);
             var condition = ParseExpression();
             var body = ParseStatement();
+
+            Log.PARSER($"Exit new WhileStatementSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new WhileStatementSyntax(keyword, condition, body);
         }
 
         private StatementSyntax ParseForStatement()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             var keyword = MatchToken(SyntaxKind.ForKeyword);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var equalsToken = MatchToken(SyntaxKind.EqualsToken);
@@ -228,12 +271,18 @@ namespace Minsk.CodeAnalysis.Syntax
             var upperBound = ParseExpression();
             var body = ParseStatement();
 
+            Log.PARSER($"Exit new ForStatementSyntax()", Common.LOG_CATEGORY, startTicks);
+
             return new ForStatementSyntax(keyword, identifier, equalsToken, lowerBound, toKeyword, upperBound, body);
         }
 
         private ExpressionStatementSyntax ParseExpressionStatement()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             var expression = ParseExpression();
+
+            Log.PARSER($"Exit new ExpressionStatementSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new ExpressionStatementSyntax(expression);
         }
@@ -245,7 +294,7 @@ namespace Minsk.CodeAnalysis.Syntax
         {
             Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
 
-            Log.PARSER($"Exit return ParseAssignmentExpression()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new ParseAssignmentExpression()", Common.LOG_CATEGORY, startTicks);
 
             return ParseAssignmentExpression();
         }
@@ -263,17 +312,20 @@ namespace Minsk.CodeAnalysis.Syntax
                 var identifierToken = NextToken();
                 var operatorToken = NextToken();
                 var right = ParseAssignmentExpression();
+
+                Log.PARSER($"Exit new AssignmentExpressionSyntax()", Common.LOG_CATEGORY, startTicks);
+
                 return new AssignmentExpressionSyntax(identifierToken, operatorToken, right);
             }
 
-            Log.PARSER($"Exit return ParseBinaryExpression()", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit new ParseBinaryExpression()", Common.LOG_CATEGORY, startTicks);
 
             return ParseBinaryExpression();
         }
 
         private ExpressionSyntax ParseBinaryExpression(int parentPrecedence = 0)
         {
-            Int64 startTicks = Log.PARSER($"Enter parentPrecedence: ({parentPrecedence})", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.PARSER($"Enter parentPrecedence:{parentPrecedence}", Common.LOG_CATEGORY);
 
             ExpressionSyntax left;
 
@@ -306,60 +358,84 @@ namespace Minsk.CodeAnalysis.Syntax
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
 
-            Log.PARSER($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.PARSER($"Exit {left.Kind}", Common.LOG_CATEGORY, startTicks);
 
             return left;
         }
 
         private ExpressionSyntax ParsePrimaryExpression()
         {
-            //Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
 
             switch (Current.Kind)
             {
                 case SyntaxKind.OpenParenthesisToken:
+                    Log.PARSER($"Exit ParseParenthesizedExpression()", Common.LOG_CATEGORY, startTicks);
+
                     return ParseParenthesizedExpression();
 
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
+                    Log.PARSER($"Exit ParseBooleanLiteral()", Common.LOG_CATEGORY, startTicks);
+
                     return ParseBooleanLiteral();
 
                 case SyntaxKind.NumberToken:
+                    Log.PARSER($"Exit ParseNumberLiteral()", Common.LOG_CATEGORY, startTicks);
+
                     return ParseNumberLiteral();
 
                 case SyntaxKind.IdentifierToken:
                 default:
+                    Log.PARSER($"Exit ParseNameExpression()", Common.LOG_CATEGORY, startTicks);
+
                     return ParseNameExpression();
             }
         }
 
         private ExpressionSyntax ParseParenthesizedExpression()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             var left = MatchToken(SyntaxKind.OpenParenthesisToken);
             var expression = ParseExpression();
             var right = MatchToken(SyntaxKind.CloseParenthesisToken);
+
+            Log.PARSER($"Exit new ParenthesizedExpressionSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new ParenthesizedExpressionSyntax(left, expression, right);
         }
 
         private ExpressionSyntax ParseBooleanLiteral()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             var isTrue = Current.Kind == SyntaxKind.TrueKeyword;
             var keywordToken = isTrue ? MatchToken(SyntaxKind.TrueKeyword) : MatchToken(SyntaxKind.FalseKeyword);
+
+            Log.PARSER($"Exit new LiteralExpressionSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new LiteralExpressionSyntax(keywordToken, isTrue);
         }
 
         private ExpressionSyntax ParseNumberLiteral()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             var numberToken = MatchToken(SyntaxKind.NumberToken);
+
+            Log.PARSER($"Exit new LiteralExpressionSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new LiteralExpressionSyntax(numberToken);
         }
 
         private ExpressionSyntax ParseNameExpression()
         {
+            Int64 startTicks = Log.PARSER($"Enter", Common.LOG_CATEGORY);
+
             var identifierToken = MatchToken(SyntaxKind.IdentifierToken);
+
+            Log.PARSER($"Exit new NameExpressionSyntax()", Common.LOG_CATEGORY, startTicks);
 
             return new NameExpressionSyntax(identifierToken);
         }

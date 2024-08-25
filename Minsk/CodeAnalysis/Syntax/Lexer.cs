@@ -8,6 +8,7 @@ namespace Minsk.CodeAnalysis.Syntax
 {
     // NOTE(crhodes)
     // Lexer breaks the input stream into tokens (words)
+    // which are then passed to the Parser
 
     internal sealed class Lexer
     {
@@ -24,7 +25,7 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public Lexer(SourceText text)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: text: ({text})", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter text:{text}", Common.LOG_CATEGORY);
 
             _text = text;
 
@@ -38,19 +39,19 @@ namespace Minsk.CodeAnalysis.Syntax
 
         private char Peek(int offset)
         {
-            Int64 startTicks = Log.LEXER($"Enter offset: ({offset})", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.LEXER($"Enter offset:{offset}", Common.LOG_CATEGORY);
 
             var index = _position + offset;
 
             if (index >= _text.Length)
             {
-                Log.LEXER($"Exit: (\0)", Common.LOG_CATEGORY, startTicks);
+                Log.LEXER($"Exit \0", Common.LOG_CATEGORY, startTicks);
 
                 return '\0';
             }
             else
             {
-                Log.LEXER($"Exit: ({_text[index]})", Common.LOG_CATEGORY, startTicks);
+                Log.LEXER($"Exit {_text[index]}", Common.LOG_CATEGORY, startTicks);
 
                 return _text[index];
             }
@@ -232,23 +233,29 @@ namespace Minsk.CodeAnalysis.Syntax
                 text = _text.ToString(_start, length);
             }
 
-            Log.PARSER($"Exit: new SyntaxToken()", Common.LOG_CATEGORY, startTicks);
+            Log.LEXER($"Exit new SyntaxToken()", Common.LOG_CATEGORY, startTicks);
 
             return new SyntaxToken(_kind, _start, text, _value);
         }
 
         private void ReadWhiteSpace()
         {
+            Int64 startTicks = Log.LEXER($"Enter", Common.LOG_CATEGORY);
+
             while (char.IsWhiteSpace(Current))
             {
                 _position++;
             }
 
             _kind = SyntaxKind.WhiteSpaceToken;
+
+            Log.LEXER($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         private void ReadNumberToken()
         {
+            Int64 startTicks = Log.LEXER($"Enter", Common.LOG_CATEGORY);
+
             while (char.IsDigit(Current))
             {
                 _position++;
@@ -264,10 +271,14 @@ namespace Minsk.CodeAnalysis.Syntax
 
             _value = value;
             _kind = SyntaxKind.NumberToken;
+
+            Log.LEXER($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         private void ReadIdentifierOrKeyword()
         {
+            Int64 startTicks = Log.LEXER($"Enter", Common.LOG_CATEGORY);
+
             // true
             // false
             while (char.IsLetter(Current))
@@ -278,6 +289,8 @@ namespace Minsk.CodeAnalysis.Syntax
             var length = _position - _start;
             var text = _text.ToString(_start, length);
             _kind = SyntaxFacts.GetKeyWordKind(text);
+
+            Log.LEXER($"Exit", Common.LOG_CATEGORY, startTicks);
         }
     }
 }

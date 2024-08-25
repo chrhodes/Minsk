@@ -6,7 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+<<<<<<< HEAD
     <PackageReference Include="VNC.Logging" Version="2.0.0" />
+=======
+    <PackageReference Include="VNC.Logging" Version="2.1.0" />
+>>>>>>> 75dd8c82acb0768ca4610d1fbbb445b28a8fd144
   </ItemGroup>
 
 </Project>

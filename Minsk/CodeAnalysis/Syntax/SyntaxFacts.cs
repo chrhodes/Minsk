@@ -1,38 +1,65 @@
 using System;
 using System.Collections.Generic;
 
+using VNC;
+
 namespace Minsk.CodeAnalysis.Syntax
 {
     public static class SyntaxFacts
     {
         // NOTE(crhodes)
         // There is interaction between Unary and Binary Operators
-        // 3 > 2, 1
+        //
+        // -1 * 3
+        //
+        //     -
+        //     |
+        //     *
+        //    / \
+        //   1   3
+
+        // or
+
+        //     *
+        //    / \
+        //   -   3
+        //   |
+        //   1
 
         public static int GetUnaryOperatorPrecedence(this SyntaxKind kind)
         {
+            Int64 startTicks = Log.SYNTAX_LOW($"Enter kind:{kind}", Common.LOG_CATEGORY);
+
             switch (kind)
             {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.BangToken:
+                    Log.SYNTAX_LOW($"Exit 6", Common.LOG_CATEGORY, startTicks);
                     return 6;
 
+                // Not a Unary Operator
+
                 default:
+                    Log.SYNTAX_LOW($"Exit 0", Common.LOG_CATEGORY, startTicks);
                     return 0;
             }
         }
 
         public static int GetBinaryOperatorPrecedence(this SyntaxKind kind)
         {
+            Int64 startTicks = Log.SYNTAX_LOW($"Enter kind:{kind}", Common.LOG_CATEGORY);
+
             switch (kind)
             {
                 case SyntaxKind.StarToken:
                 case SyntaxKind.SlashToken:
+                    Log.SYNTAX_LOW($"Exit 5", Common.LOG_CATEGORY, startTicks);
                     return 5;
 
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
+                    Log.SYNTAX_LOW($"Exit 4", Common.LOG_CATEGORY, startTicks);
                     return 4;
 
                 case SyntaxKind.EqualsEqualsToken:
@@ -41,51 +68,69 @@ namespace Minsk.CodeAnalysis.Syntax
                 case SyntaxKind.LessOrEqualsToken:
                 case SyntaxKind.GreaterToken:
                 case SyntaxKind.GreaterOrEqualsToken:
+                    Log.SYNTAX_LOW($"Exit 3", Common.LOG_CATEGORY, startTicks);
                     return 3;
 
                 case SyntaxKind.AmpersandAmpersandToken:
+                    Log.SYNTAX_LOW($"Exit 2", Common.LOG_CATEGORY, startTicks);
                     return 2;
 
                 case SyntaxKind.PipePipeToken:
+                    Log.SYNTAX_LOW($"Exit 1", Common.LOG_CATEGORY, startTicks);
                     return 1;
 
+                // Not a Binary Operator
+
                 default:
+                    Log.SYNTAX_LOW($"Exit 0", Common.LOG_CATEGORY, startTicks);
                     return 0;
             }
         }
 
         public static SyntaxKind GetKeyWordKind(string text)
         {
+            Int64 startTicks = Log.SYNTAX_LOW($"Enter text:{text}", Common.LOG_CATEGORY);
+
             switch (text)
             {
                 case "else":
+                    Log.SYNTAX_LOW($"Exit", Common.LOG_CATEGORY, startTicks);
                     return SyntaxKind.ElseKeyword;
 
                 case "false":
+                    Log.SYNTAX_LOW($"Exit", Common.LOG_CATEGORY, startTicks);
                     return SyntaxKind.FalseKeyword;
 
                 case "for":
+                    Log.SYNTAX_LOW($"Exit", Common.LOG_CATEGORY, startTicks);
                     return SyntaxKind.ForKeyword;
 
                 case "if":
+                    Log.SYNTAX_LOW($"Exit", Common.LOG_CATEGORY, startTicks);
                     return SyntaxKind.IfKeyword;
 
                 case "let":
+                    Log.SYNTAX_LOW($"Exit", Common.LOG_CATEGORY, startTicks);
                     return SyntaxKind.LetKeyword;
 
                 case "to":
+                    Log.SYNTAX_LOW($"Exit", Common.LOG_CATEGORY, startTicks);
                     return SyntaxKind.ToKeyword;
 
                 case "true":
+                    Log.SYNTAX_LOW($"Exit", Common.LOG_CATEGORY, startTicks);
                     return SyntaxKind.TrueKeyword;
 
                 case "var":
+                    Log.SYNTAX_LOW($"Exit", Common.LOG_CATEGORY, startTicks);
                     return SyntaxKind.VarKeyword;
 
                 case "while":
+                    Log.SYNTAX_LOW($"Exit", Common.LOG_CATEGORY, startTicks);
                     return SyntaxKind.WhileKeyword;
 
                 default:
+                    Log.SYNTAX_LOW($"Exit", Common.LOG_CATEGORY, startTicks);
                     return SyntaxKind.IdentifierToken;
             }
         }
@@ -118,6 +163,8 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public static string GetText(SyntaxKind kind)
         {
+            Int64 startTicks = Log.SYNTAX_LOW($"Enter kind:{kind} Exit <text>", Common.LOG_CATEGORY);
+
             switch (kind)
             {
                 case SyntaxKind.PlusToken:

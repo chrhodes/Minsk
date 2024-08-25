@@ -16,7 +16,7 @@ namespace Minsk.CodeAnalysis.Syntax
     {
         private SyntaxTree(SourceText text)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: text: ({text})", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter text:{text}", Common.LOG_CATEGORY);
 
             var parser = new Parser(text);
 
@@ -36,13 +36,21 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public static SyntaxTree Parse(string text)
         {
+            Int64 startTicks = Log.SYNTAX($"Enter text:{text}", Common.LOG_CATEGORY);
+
             var sourceText = SourceText.From(text);
+
+            Log.SYNTAX($"Exit", Common.LOG_CATEGORY, startTicks);
 
             return Parse(sourceText);
         }
 
         public static SyntaxTree Parse(SourceText text)
         {
+            Int64 startTicks = Log.SYNTAX($"Enter text:{text}", Common.LOG_CATEGORY);
+
+            Log.SYNTAX($"Exit", Common.LOG_CATEGORY, startTicks);
+
             return new SyntaxTree(text);
         }
 
@@ -51,12 +59,19 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public static IEnumerable<SyntaxToken> ParseTokens(string text)
         {
+            Int64 startTicks = Log.SYNTAX($"Enter text:{text}", Common.LOG_CATEGORY);
+
             var sourceText = SourceText.From(text);
+
+            Log.SYNTAX($"Exit", Common.LOG_CATEGORY, startTicks);
+
             return ParseTokens(sourceText);
         }
 
         public static IEnumerable<SyntaxToken> ParseTokens(SourceText text)
         {
+            Int64 startTicks = Log.SYNTAX($"Enter text:{text}", Common.LOG_CATEGORY);
+
             var lexer = new Lexer(text);
 
             while (true)
@@ -65,8 +80,12 @@ namespace Minsk.CodeAnalysis.Syntax
 
                 if (token.Kind == SyntaxKind.EndOfFileToken) break;
 
+                Log.SYNTAX($"Exit {token.Kind}", Common.LOG_CATEGORY, startTicks);
+
                 yield return token;
             }
+
+            Log.SYNTAX($"Exit", Common.LOG_CATEGORY, startTicks);
         }
     }
 }

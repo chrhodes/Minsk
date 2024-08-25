@@ -15,7 +15,7 @@ namespace Minsk.CodeAnalysis.Binding
 
         public Binder(BoundScope parent)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter parent:{parent}", Common.LOG_CATEGORY);
 
             _scope = new BoundScope(parent);
 
@@ -24,6 +24,8 @@ namespace Minsk.CodeAnalysis.Binding
 
         public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, CompilationUnitSyntax syntax)
         {
+            Int64 startTicks = Log.BINDER($"Enter previous:{previous} syntax:{syntax.Kind}", Common.LOG_CATEGORY);
+
             var parentScope = CreateParentScopes(previous);
             var binder = new Binder(parentScope);
             var statement = binder.BindStatement(syntax.Statement);
@@ -35,11 +37,15 @@ namespace Minsk.CodeAnalysis.Binding
                 diagnostics = diagnostics.InsertRange(0, previous.Diagnostics);
             }
 
+            Log.CONSTRUCTOR($"Exit new BoundGlobalScope()", Common.LOG_CATEGORY, startTicks);
+
             return new BoundGlobalScope(previous, diagnostics, variables, statement);
         }
 
         private static BoundScope CreateParentScopes(BoundGlobalScope previous)
         {
+            Int64 startTicks = Log.BINDER($"Enter previous:{previous}", Common.LOG_CATEGORY);
+
             // submission 3 -> submission 2 -> submission 1 from REPL
 
             var stack = new Stack<BoundGlobalScope>();
@@ -65,6 +71,8 @@ namespace Minsk.CodeAnalysis.Binding
                 parent = scope;
             }
 
+            Log.CONSTRUCTOR($"Exit {parent}", Common.LOG_CATEGORY, startTicks);
+
             return parent;
         }
 
@@ -72,37 +80,37 @@ namespace Minsk.CodeAnalysis.Binding
 
         private BoundStatement BindStatement(StatementSyntax syntax)
         {
-            Int64 startTicks = Log.BINDER($"Enter syntax.Kind:{syntax.Kind}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
 
             switch (syntax.Kind)
             {
                 case SyntaxKind.BlockStatement:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindBlockStatement()", Common.LOG_CATEGORY, startTicks);
 
                     return BindBlockStatement((BlockStatementSyntax)syntax);
 
                 case SyntaxKind.VariableDeclaration:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindVariableDeclaration()", Common.LOG_CATEGORY, startTicks);
 
                     return BindVariableDeclaration((VariableDeclarationSyntax)syntax);
 
                 case SyntaxKind.IfStatement:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindIfStatement()", Common.LOG_CATEGORY, startTicks);
 
                     return BindIfStatement((IfStatementSyntax)syntax);
 
                 case SyntaxKind.WhileStatement:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindWhileStatement()", Common.LOG_CATEGORY, startTicks);
 
                     return BindWhileStatement((WhileStatementSyntax)syntax);
 
                 case SyntaxKind.ForStatement:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindForStatement()", Common.LOG_CATEGORY, startTicks);
 
                     return BindForStatement((ForStatementSyntax)syntax);
 
                 case SyntaxKind.ExpressionStatement:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindExpressionStatement()", Common.LOG_CATEGORY, startTicks);
 
                     return BindExpressionStatement((ExpressionStatementSyntax)syntax);
 
@@ -113,6 +121,8 @@ namespace Minsk.CodeAnalysis.Binding
 
         private BoundStatement BindBlockStatement(BlockStatementSyntax syntax)
         {
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
+
             var statements = ImmutableArray.CreateBuilder<BoundStatement>();
             _scope = new BoundScope(_scope);
 
@@ -124,11 +134,15 @@ namespace Minsk.CodeAnalysis.Binding
 
             _scope = _scope.Parent;
 
+            Log.CONSTRUCTOR($"Exit new BoundBlockStatement()", Common.LOG_CATEGORY, startTicks);
+
             return new BoundBlockStatement(statements.ToImmutable());
         }
 
         private BoundStatement BindVariableDeclaration(VariableDeclarationSyntax syntax)
         {
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
+
             var name = syntax.Identifier.Text;
             var initializer = BindExpression(syntax.Initializer);
             var isReadOnly = syntax.Keyword.Kind == SyntaxKind.LetKeyword;
@@ -139,30 +153,42 @@ namespace Minsk.CodeAnalysis.Binding
                 _diagnostics.ReportVariableAlreadyDeclared(syntax.Identifier.Span, name);
             }
 
+            Log.CONSTRUCTOR($"Exit new BoundVariableDeclaration()", Common.LOG_CATEGORY, startTicks);
+
             return new BoundVariableDeclaration(variable, initializer);
         }
 
         private BoundStatement BindIfStatement(IfStatementSyntax syntax)
         {
+
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
             var condition = BindExpression(syntax.Condition, typeof(Boolean));
             var thenStatement = BindStatement(syntax.ThenStatement);
             var elseStatement = syntax.ElseClause == null
                 ? null
                 : BindStatement(syntax.ElseClause.ElseStatement);
 
+            Log.CONSTRUCTOR($"Exit new BoundIfStatemen()", Common.LOG_CATEGORY, startTicks);
+
             return new BoundIfStatement(condition, thenStatement, elseStatement);
         }
 
         private BoundStatement BindWhileStatement(WhileStatementSyntax syntax)
         {
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
+
             var condition = BindExpression(syntax.Condition, typeof(Boolean));
             var body = BindStatement(syntax.Body);
+
+            Log.CONSTRUCTOR($"Exit new BoundWhileStatemen()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundWhileStatement(condition, body);
         }
 
         private BoundStatement BindForStatement(ForStatementSyntax syntax)
         {
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
+
             var lowerBound = BindExpression(syntax.LowerBound, typeof(Int32));
             var upperBound = BindExpression(syntax.UpperBound, typeof(Int32));
 
@@ -180,18 +206,26 @@ namespace Minsk.CodeAnalysis.Binding
 
             _scope = _scope.Parent;
 
+            Log.CONSTRUCTOR($"Exit new BoundForStatement()", Common.LOG_CATEGORY, startTicks);
+
             return new BoundForStatement(variable, lowerBound, upperBound, body);
         }
 
         private BoundStatement BindExpressionStatement(ExpressionStatementSyntax syntax)
         {
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
+
             var expression = BindExpression(syntax.Expression);
+
+            Log.CONSTRUCTOR($"Exit new BoundExpressionStatement()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundExpressionStatement(expression);
         }
 
         private BoundExpression BindExpression(ExpressionSyntax syntax, Type targetType)
         {
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind} targetType:{targetType}", Common.LOG_CATEGORY);
+
             var result = BindExpression(syntax);
 
             if (result.Type != targetType)
@@ -199,42 +233,44 @@ namespace Minsk.CodeAnalysis.Binding
                 _diagnostics.ReportCannotConvert(syntax.Span, result.Type, targetType);
             }
 
+            Log.CONSTRUCTOR($"Exit {result.Kind}", Common.LOG_CATEGORY, startTicks);
+
             return result;
         }
 
         public BoundExpression BindExpression(ExpressionSyntax syntax)
         {
-            Int64 startTicks = Log.BINDER($"Enter syntax.Kind:{syntax.Kind}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
 
             switch (syntax.Kind)
             {
                 case SyntaxKind.LiteralExpression:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindLiteralExpression()", Common.LOG_CATEGORY, startTicks);
 
                     return BindLiteralExpression((LiteralExpressionSyntax)syntax);
 
                 case SyntaxKind.UnaryExpression:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindUnaryExpression()", Common.LOG_CATEGORY, startTicks);
 
                     return BindUnaryExpression((UnaryExpressionSyntax)syntax);
 
                 case SyntaxKind.BinaryExpression:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindBinaryExpression()", Common.LOG_CATEGORY, startTicks);
 
                     return BindBinaryExpression((BinaryExpressionSyntax)syntax);
 
                 case SyntaxKind.ParenthesizedExpression:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindParenthesizedExpression()", Common.LOG_CATEGORY, startTicks);
 
                     return BindParenthesizedExpression((ParenthesizedExpressionSyntax)syntax);
 
                 case SyntaxKind.NameExpression:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindNameExpression()", Common.LOG_CATEGORY, startTicks);
 
                     return BindNameExpression((NameExpressionSyntax)syntax);
 
                 case SyntaxKind.AssignmentExpression:
-                    Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                    Log.BINDER($"Exit BindAssignmentExpression()", Common.LOG_CATEGORY, startTicks);
 
                     return BindAssignmentExpression((AssignmentExpressionSyntax)syntax);
 
@@ -246,26 +282,27 @@ namespace Minsk.CodeAnalysis.Binding
 
         private BoundExpression BindParenthesizedExpression(ParenthesizedExpressionSyntax syntax)
         {
-            Int64 startTicks = Log.BINDER($"Enter", Common.LOG_CATEGORY);
-            Log.BINDER($"Exit ({syntax.Expression})", Common.LOG_CATEGORY, startTicks);
+            Int64 startTicks = Log.BINDER($"Enter syntax: {syntax.Kind}", Common.LOG_CATEGORY);
+
+            Log.CONSTRUCTOR($"Exit BindExpression()", Common.LOG_CATEGORY, startTicks);
 
             return BindExpression(syntax.Expression);
         }
 
         private BoundExpression BindLiteralExpression(LiteralExpressionSyntax syntax)
         {
-            Int64 startTicks = Log.BINDER($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter syntax: {syntax.Kind}", Common.LOG_CATEGORY);
 
             var value = syntax.Value ?? 0;
 
-            Log.BINDER($"Exit ({value})", Common.LOG_CATEGORY, startTicks);
+            Log.BINDER($"Exit new BoundLiteralExprression()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundLiteralExpression(value);
         }
 
         private BoundExpression BindNameExpression(NameExpressionSyntax syntax)
         {
-            Int64 startTicks = Log.BINDER($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
 
             var name = syntax.IdentifierToken.Text;
 
@@ -275,6 +312,8 @@ namespace Minsk.CodeAnalysis.Binding
                 // We already reported an error so we can just return
                 // an error expression.
 
+                Log.CONSTRUCTOR($"Exit new BoundLiteralExpression()", Common.LOG_CATEGORY, startTicks);
+
                 return new BoundLiteralExpression(0);
             }
 
@@ -282,18 +321,19 @@ namespace Minsk.CodeAnalysis.Binding
             {
                 _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
 
-                Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                Log.BINDER($"Exit new BoundLiteralExpression()", Common.LOG_CATEGORY, startTicks);
+
                 return new BoundLiteralExpression(0);
             }
 
-            Log.BINDER($"Exit ({variable.Name})", Common.LOG_CATEGORY, startTicks);
+            Log.BINDER($"Exit new BoundVariableExpression()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundVariableExpression(variable);
         }
 
         private BoundExpression BindAssignmentExpression(AssignmentExpressionSyntax syntax)
         {
-            Int64 startTicks = Log.BINDER($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
 
             var name = syntax.IdentifierToken.Text;
             var boundExpression = BindExpression(syntax.Expression);
@@ -302,7 +342,8 @@ namespace Minsk.CodeAnalysis.Binding
             {
                 _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
 
-                Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                Log.BINDER($"Exit {boundExpression.Kind}", Common.LOG_CATEGORY, startTicks);
+
                 return boundExpression;
             }
 
@@ -315,17 +356,19 @@ namespace Minsk.CodeAnalysis.Binding
             {
                 _diagnostics.ReportCannotConvert(syntax.Expression.Span, boundExpression.Type, variable.Type);
 
+                Log.BINDER($"Exit {boundExpression.Kind}", Common.LOG_CATEGORY, startTicks);
+
                 return boundExpression;
             }
 
-            Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.BINDER($"Exit new BoundAssignmentExpression()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundAssignmentExpression(variable, boundExpression);
         }
 
         private BoundExpression BindUnaryExpression(UnaryExpressionSyntax syntax)
         {
-            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
 
             var boundOperand = BindExpression(syntax.Operand);
             var boundOperator = BoundUnaryOperator.Bind(syntax.OperatorToken.Kind, boundOperand.Type);
@@ -337,19 +380,19 @@ namespace Minsk.CodeAnalysis.Binding
                 // NOTE(crhodes)
                 // Return something for now to avoid cascading errors.
 
-                Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                Log.BINDER($"Exit {boundOperand.Kind}", Common.LOG_CATEGORY, startTicks);
 
                 return boundOperand;
             }
 
-            Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.BINDER($"Exit new BoundUnaryExpression()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundUnaryExpression(boundOperator, boundOperand);
         }
 
         private BoundExpression BindBinaryExpression(BinaryExpressionSyntax syntax)
         {
-            Int64 startTicks = Log.BINDER($"Enter", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.BINDER($"Enter syntax:{syntax.Kind}", Common.LOG_CATEGORY);
 
             var boundLeft = BindExpression(syntax.Left);
             var boundRight = BindExpression(syntax.Right);
@@ -361,12 +404,12 @@ namespace Minsk.CodeAnalysis.Binding
 
                 // NOTE(crhodes)
                 // Return something for now to avoid cascading errors.
-                Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+                Log.BINDER($"Exit {boundLeft.Kind}", Common.LOG_CATEGORY, startTicks);
 
                 return boundLeft;
             }
 
-            Log.BINDER($"Exit", Common.LOG_CATEGORY, startTicks);
+            Log.BINDER($"Exit new BoundBinaryExpression()", Common.LOG_CATEGORY, startTicks);
 
             return new BoundBinaryExpression(boundLeft, boundOperator, boundRight);
         }

@@ -1,5 +1,6 @@
 using System;
-using System.Linq;
+
+using VNC;
 
 namespace Minsk.CodeAnalysis
 {
@@ -7,9 +8,13 @@ namespace Minsk.CodeAnalysis
     {
         internal VariableSymbol(string name, bool isReadOnly, Type type)
         {
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter name:{name}, isReadOnly:{isReadOnly} type:{type}", Common.LOG_CATEGORY);
+
             Name = name;
             IsReadOnly = isReadOnly;
             Type = type;
+
+            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public string Name { get; }

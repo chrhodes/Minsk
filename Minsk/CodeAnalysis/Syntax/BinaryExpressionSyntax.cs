@@ -9,7 +9,7 @@ namespace Minsk.CodeAnalysis.Syntax
     {
         public BinaryExpressionSyntax(ExpressionSyntax left, SyntaxToken operatorToken, ExpressionSyntax right)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: left: {left} operatorToken: {operatorToken} right: {right}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter left:{left.Kind} operatorToken:{operatorToken.Kind} right:{right.Kind}", Common.LOG_CATEGORY);
 
             Left = left;
             OperatorToken = operatorToken;
@@ -24,6 +24,7 @@ namespace Minsk.CodeAnalysis.Syntax
         public SyntaxToken OperatorToken { get; }
         public ExpressionSyntax Right { get; }
 
+<<<<<<< HEAD
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             Int64 startTicks = Log.SYNTAX($"Enter/Exit", Common.LOG_CATEGORY);
@@ -32,5 +33,16 @@ namespace Minsk.CodeAnalysis.Syntax
             yield return OperatorToken;
             yield return Right;
         }
+=======
+        // NOTE(crhodes)
+        // This got replaced with non-abstract implementation in SyntaxNode
+
+        //public override IEnumerable<SyntaxNode> GetChildren()
+        //{
+        //    yield return Left;
+        //    yield return OperatorToken;
+        //    yield return Right;
+        //}
+>>>>>>> 75dd8c82acb0768ca4610d1fbbb445b28a8fd144
     }
 }

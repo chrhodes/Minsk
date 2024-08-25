@@ -7,8 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <PackageReference Include="VNC.Logging" Version="2.0.0" />
     <PackageReference Include="VNC.Logging.TraceListeners.SignalRCoreListener" Version="1.0.0" />
+=======
+    <PackageReference Include="VNC.Logging" Version="2.1.0" />
+    <!--<PackageReference Include="VNC.Logging.TraceListeners.SignalRCoreListener" Version="1.0.0" />-->
+    <PackageReference Include="VNC.Logging.TraceListeners.SignalRCoreListeners" Version="1.0.0" />
+>>>>>>> 75dd8c82acb0768ca4610d1fbbb445b28a8fd144
   </ItemGroup>
 
   <ItemGroup>

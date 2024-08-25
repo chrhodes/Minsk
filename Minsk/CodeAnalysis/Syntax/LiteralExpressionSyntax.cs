@@ -10,15 +10,14 @@ namespace Minsk.CodeAnalysis.Syntax
         public LiteralExpressionSyntax(SyntaxToken literalToken)
             : this(literalToken, literalToken.Value)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: literalToken:{literalToken}", Common.LOG_CATEGORY);
+            //Int64 startTicks = Log.CONSTRUCTOR($"Enter literalToken:{literalToken.Kind}", Common.LOG_CATEGORY);
 
-
-            Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
+            //Log.CONSTRUCTOR($"Exit", Common.LOG_CATEGORY, startTicks);
         }
 
         public LiteralExpressionSyntax(SyntaxToken literalToken, object value)
         {
-            Int64 startTicks = Log.CONSTRUCTOR($"Enter: literalToken:{literalToken} value:{value}", Common.LOG_CATEGORY);
+            Int64 startTicks = Log.CONSTRUCTOR($"Enter literalToken:{literalToken.Kind} value:{value}", Common.LOG_CATEGORY);
 
             LiteralToken = literalToken;
             Value = value;
@@ -30,6 +29,9 @@ namespace Minsk.CodeAnalysis.Syntax
 
         public SyntaxToken LiteralToken { get; }
         public object Value { get; }
+
+        // NOTE(crhodes)
+        // This got replaced with non-abstract implementation in SyntaxNode
 
         //public override IEnumerable<SyntaxNode> GetChildren()
         //{
